@@ -75,8 +75,8 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 ## Authors
 
 * **Stanislav Modrák** - *Backend Developer* at [Slovensko.Digital](https://github.com/slovensko-digital) & [Proxima](smith558.github.io), *Graphic Designer* at [Revolware](https://github.com/slovensko-digital)
+* **Milea Gheorghe** - https://github.com/MGhee
 * **George Brown**
-* **Milea Gheorghe**
 * **Luke Young**
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.

@@ -1,3 +1,10 @@
+<p align="center">
+  <a href="https://www.southampton.ac.uk/">
+    <img height=85 src="https://upload.wikimedia.org/wikipedia/commons/a/a7/University_of_Southampton_Logo.svg">
+  </a>
+  <br>Engineering/Physics/Maths/Geophysics Foundation Year
+</p>
+
 # CA Group Project
 
 The idea of this program is to clearly illustrate how phasor diagrams relate to the

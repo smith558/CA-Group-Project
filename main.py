@@ -54,6 +54,11 @@ class Application(tk.Frame):
         self.rowconfigure(12, minsize=35, weight=1)
         create_start_btn(self, _row=13, _column=0, width=4)
 
+    # back-end processing method
+    @staticmethod
+    def process_method():
+        pass
+
 
 app = Application()
 app.master.title('Sample application')

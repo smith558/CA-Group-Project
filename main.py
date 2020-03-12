@@ -27,6 +27,7 @@ class Application(tk.Frame):
             for i in range(4):
                 master.columnconfigure(i, minsize=50, weight=1)
                 master.rowconfigure(i, weight=1)
+                # make re-sizeable
                 top.columnconfigure(i, weight=1)
                 top.rowconfigure(i, weight=1)
 

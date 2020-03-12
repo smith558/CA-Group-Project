@@ -1,90 +1,52 @@
-﻿import Tkinter as Tk
+﻿# coding=utf-8
+import Tkinter as tk
+import AC_math as ac
 
 
-class Application(Tk.Frame):
+class Application(tk.Frame):
     def __init__(self, master=None):
-        Tk.Frame.__init__(self, master)
+        tk.Frame.__init__(self, master)
         self.grid()
         self.create_widgets()
 
     def create_widgets(self):
-        w = Tk.Label(self, text="Vs")
-        w.grid(row=1, column=10, )
-        f = Tk.Label(self, text="Vr")
-        f.grid(row=3, column=10)
-        g = Tk.Label(self, text="Vl")
-        g.grid(row=5, column=10)
-        h = Tk.Label(self, text="Vc")
-        h.grid(row=7, column=10)
-        e = Tk.Label(self, text="Xc")
-        e.grid(row=9, column=10)
-        i = Tk.Label(self, text="Xl")
-        i.grid(row=11, column=10)
-        a = Tk.Label(self, text="R")
-        a.grid(row=1, column=17)
-        b = Tk.Label(self, text="Z")
-        b.grid(row=3, column=17)
-        c = Tk.Label(self, text="f")
-        c.grid(row=5, column=17)
-        d = Tk.Label(self, text="C")
-        d.grid(row=7, column=17)
-        j = Tk.Label(self, text="L")
-        j.grid(row=9, column=17)
-        k = Tk.Label(self, text="θ")
-        k.grid(row=11, column=17)
+        def create_input_ui(master):
+            # initiate text for labels
+            label_text = ['Vs', 'Vr', 'VL', 'Vc', 'XC', 'XL', 'R', 'Z', 'f', 'C', 'L', 'θ', 'Ω', 'Ω', 'Ω', 'Ω', 'Hz',
+                          '°', 'H', 'F', 'V', 'V', 'V', 'V']
+            # dictionary of tk.Label & tk.Entry objects
+            labels = {}
+            entries = {}
+            # top-window
+            top = master.winfo_toplevel()
 
-        m = Tk.Label(self, text="V")
-        m.grid(row=1, column=12, )
-        l = Tk.Label(self, text="V")
-        l.grid(row=3, column=12)
-        z = Tk.Label(self, text="V")
-        z.grid(row=5, column=12)
-        t = Tk.Label(self, text="V")
-        t.grid(row=7, column=12)
-        y = Tk.Label(self, text="Ω")
-        y.grid(row=9, column=12)
-        o = Tk.Label(self, text="Ω")
-        o.grid(row=11, column=12)
-        p = Tk.Label(self, text="Ω")
-        p.grid(row=1, column=19)
-        s = Tk.Label(self, text="Ω")
-        s.grid(row=3, column=19)
-        q = Tk.Label(self, text="Hz")
-        q.grid(row=5, column=19)
-        x = Tk.Label(self, text="H")
-        x.grid(row=7, column=19)
-        u = Tk.Label(self, text="F")
-        u.grid(row=9, column=19)
-        v = Tk.Label(self, text="°")
-        v.grid(row=11, column=19)
+            # set-up grid
+            for i in range(4):
+                master.columnconfigure(i, minsize=50, weight=1)
+                master.rowconfigure(i, weight=1)
+                top.columnconfigure(i, weight=1)
+                top.rowconfigure(i, weight=1)
 
-        name = Tk.Entry(self)
-        name.grid(row=1, column=11)
-        name = Tk.Entry(self)
-        name.grid(row=3, column=11)
-        name = Tk.Entry(self)
-        name.grid(row=5, column=11)
-        name = Tk.Entry(self)
-        name.grid(row=7, column=11)
-        name = Tk.Entry(self)
-        name.grid(row=9, column=11)
-        name = Tk.Entry(self)
-        name.grid(row=11, column=11)
-        name = Tk.Entry(self)
-        name.grid(row=1, column=18)
-        name = Tk.Entry(self)
-        name.grid(row=3, column=18)
-        name = Tk.Entry(self)
-        name.grid(row=5, column=18)
-        name = Tk.Entry(self)
-        name.grid(row=7, column=18)
-        name = Tk.Entry(self)
-        name.grid(row=9, column=18)
-        name = Tk.Entry(self)
-        name.grid(row=11, column=18)
+            # set-up labels & entries
+            for i in range(len(label_text)):
+                _column = 2 if (i >= 12) else 0
+                _row = i - 12 if (i >= 12) else i
+                print len(label_text)
 
-        hello = Tk.Button(self, text="Calculator", )
-        hello.grid(row=13, column=14)
+                label = labels['label_{0}'.format(i)] = tk.Label(master, text=label_text[i])
+                label.grid(row=_row, column=_column, ipadx=5, ipady=5, sticky=tk.N + tk.E + tk.S + tk.W)
+
+                entry = entries['entry_{0}'.format(i)] = tk.Entry(master)
+                entry.grid(row=_row, column=_column + 1, ipadx=5, ipady=5, sticky=tk.N + tk.E + tk.S + tk.W)
+
+        def create_start_btn(master, _row=0, _column=0, width=1):
+            self.startButton = tk.Button(master, text='Calculator', command=master.quit)
+            self.startButton.grid(row=_row, column=_column, ipadx=5, ipady=5, sticky=tk.N + tk.E + tk.S + tk.W,
+                                  columnspan=width)
+
+        create_input_ui(self)
+        self.rowconfigure(12, minsize=35, weight=1)
+        create_start_btn(self, _row=13, _column=0, width=4)
 
 
 app = Application()

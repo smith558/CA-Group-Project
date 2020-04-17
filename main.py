@@ -39,6 +39,8 @@ class Application(Frame):
         result = {}
         for i in variables:
             try:
+                if variables[i].get() == '':
+                    continue
                 result[i] = float(variables[i].get())
             except ValueError:
                 variables[i].set('numbers only')
@@ -53,7 +55,7 @@ class Application(Frame):
             selection_frame = frame(self.master_frame, pady=10)
 
             for circuit in ('RL', 'RC', 'RLC'):
-                btn = Button(selection_frame, text=circuit, width=5, height=2)
+                btn = Button(selection_frame, text=circuit, width=6, height=2)
                 btn.pack(side=LEFT, expand=YES, fill=BOTH)
 
                 def handler(event, master_=master, circuit_=circuit):
@@ -85,7 +87,7 @@ class Application(Frame):
                     return self.processing_method(event, self.variables)
 
                 for text in InputTexts.RL:
-                    var = self.variables[text[0]] = DoubleVar()
+                    var = self.variables[text[0]] = StringVar()
                     entry_frame = frame(labels_frame, side=TOP, anchor=W)
 
                     Label(entry_frame, text='Enter {} ({}):  '.format(text[1], text[0])).pack(anchor=W, side=LEFT, pady=1, expand=YES)

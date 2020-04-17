@@ -28,11 +28,9 @@ class Application(Frame):
     def __init__(self, master=None):
         # declare main Frame
         Frame.__init__(self, master)
-        # name main Frame
         self.master.title('AC Theory application')
         # TODO set font style
-        self.master.option_add('*Font', 'Verdana 10 bold')
-        # self.master.option_add('*Entry.Font', 'Courier 10')
+        self.master.option_add('*Font', 'Verdana 11 bold')
 
         self.pack(expand=YES, fill=BOTH)
         self.create_widgets()
@@ -62,25 +60,24 @@ class Application(Frame):
                 master_frame.pack_forget()
                 self.master_frame.pack(pack_settings)
 
-            master_frame = frame(master, padx=20, pady=20, font='Verdana 10 bold')
+            master_frame = frame(master, padx=20, pady=20, font='Verdana 11 bold')
 
             go_back = Button(master_frame, text='GO BACK', command=go_back)
             go_back.pack(anchor=W, pady=1)
 
             label = Label(master_frame, text='Circuit attributes {} circuit'.format(circuit)).pack(pady=10)
 
-            labels_frame = frame(master_frame, font='Verdana 10')
+            labels_frame = frame(master_frame, font='Verdana 11')
 
             if circuit == 'RL':
-                print 'window {}'.format(circuit)
                 for entry in InputTexts.RL:
                     Pmw.EntryField(labels_frame, entry_width=8, value='',
                                    label_text='Enter {} ({}):  '.format(entry[1], entry[0]), labelpos=W,
                                    labelmargin=1).pack(anchor=W, pady=1, expand=YES)
             elif circuit == 'RC':
-                print 'pass {}'.format(circuit)
+                pass
             else:
-                print 'pass {}'.format(circuit)
+                pass
 
         create_menu_window(self)
 

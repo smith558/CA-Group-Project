@@ -1,73 +1,89 @@
-﻿# coding=utf-8
-import Tkinter as tk
-# AC theory maths calculations module
-import AC_math as ac
-import tkFont
+# coding=utf-8
+from Tkinter import *
+from dummy import *
+import Pmw
 
 
-class Application(tk.Frame):
+def frame(root, side=None, expand=YES, fill=BOTH, padx=None, pady=None, anchor=None, font=None):
+    w = Frame(root)
+    if font:
+        w.option_add('*Font', font)
+
+    w.pack(side=side, expand=expand, fill=fill, padx=padx, pady=pady, anchor=anchor)
+    return w
+
+
+InputTexts = DummyClass()
+InputTexts.RL = [['Vs', 'supply voltage'], ['f', 'supply frequency'], ['XL', 'inductive reactance'],
+                 ['R', 'circuit resistance'], ['Z', 'circuit impedance'],
+                 ['I', ' magnitude of the current'], ['θ', 'phase angle of the circuit'],
+                 ['Vr', 'magnitude of the voltage across the resistance'],
+                 ['VL', 'magnitude of the voltage across the inductance']]
+
+InputTexts.RC = ''
+InputTexts.RLC = ''
+
+
+class Application(Frame):
     def __init__(self, master=None):
         # declare main Frame
-        tk.Frame.__init__(self, master)
-        # declare fonts
-        global helv10; global helv12
-        helv10 = tkFont.Font(family='Helvetica', size=10)
-        helv12 = tkFont.Font(family='Helvetica', size=12)
+        Frame.__init__(self, master)
+        # name main Frame
+        self.master.title('AC Theory application')
+        # TODO set font style
+        self.master.option_add('*Font', 'Verdana 10 bold')
+        # self.master.option_add('*Entry.Font', 'Courier 10')
 
-        self.grid()
+        self.pack(expand=YES, fill=BOTH)
         self.create_widgets()
 
-    # main GUI creation method
     def create_widgets(self):
-        def create_input_ui(master):
-            # initiate text for labels
-            label_texts = ['Vs', 'Vr', 'VL', 'Vc', 'XC', 'XL', 'R', 'Z', 'f', 'C', 'L', 'θ', 'Ω', 'Ω', 'Ω', 'Ω', 'Hz',
-                           '°', 'H', 'F', 'V', 'V', 'V', 'V']
-            # dictionaries of tk.Label & tk.Entry objects
-            labels = {}
-            entries = {}
+        def create_menu_window(master):
+            self.master_frame = frame(master, padx=20, pady=20)
+            title_label = Label(self.master_frame, text='Select circuit:').pack(side=TOP, anchor=N, expand=YES,
+                                                                                fill=BOTH)
+            selection_frame = frame(self.master_frame, pady=10)
 
-            # # top-window
-            # top = master.winfo_toplevel()
-            # # make re-sizeable
-            # top.columnconfigure(0, weight=1)
-            # top.rowconfigure(0, weight=1)
+            for circuit in ('RL', 'RC', 'RLC'):
+                btn = Button(selection_frame, text=circuit, width=5, height=2)
+                btn.pack(side=LEFT, expand=YES, fill=BOTH)
 
-            # set-up grid
-            for i in range(4):
-                master.columnconfigure(i, minsize=50)
-                master.rowconfigure(i)
+                def handler(event, master_=master, circuit_=circuit):
+                    return create_calculations_window(event, master_, circuit_)
 
-            # set-up labels & Entries
-            for i in range(len(label_texts)):
-                _column = 2 if (i >= 12) else 0
-                _row = i - 12 if (i >= 12) else i
+                btn.bind('<Button-1>', handler)
+                btn.bind('<KeyPress-space>', handler)
 
-                # initiate tk.Label objects in labels[] in format 'label_x' where x is a unique integer from 0 - 23
-                label = labels['label_{0}'.format(i)] = tk.Label(master, text=label_texts[i],
-                                                                 font=helv10)
-                label.grid(row=_row, column=_column, ipadx=5, ipady=5, sticky=tk.N + tk.E + tk.S + tk.W)
+        def create_calculations_window(event, master, circuit):
+            pack_settings = self.master_frame.pack_info()
+            self.master_frame.pack_forget()
 
-                # initiate tk.Entry objects in entries[] in format 'entry_x' where x is a unique integer from 0 - 23
-                entry = entries['entry_{0}'.format(i)] = tk.Entry(master)
-                entry.grid(row=_row, column=_column + 1, ipadx=5, ipady=5, sticky=tk.N + tk.E + tk.S + tk.W)
+            def go_back():
+                master_frame.pack_forget()
+                self.master_frame.pack(pack_settings)
 
-        def create_start_btn(master, _row=0, _column=0, width=1):
-            self.startButton = tk.Button(master, text='Calculator', font=helv12, command=master.quit)
-            self.startButton.grid(row=_row, column=_column, ipadx=5, ipady=5, sticky=tk.N + tk.E + tk.S + tk.W,
-                                  columnspan=width)
+            master_frame = frame(master, padx=20, pady=20, font='Verdana 10 bold')
 
-        create_input_ui(self)
-        # make an empty row
-        self.rowconfigure(12, minsize=35)
-        create_start_btn(self, _row=13, _column=0, width=4)
+            go_back = Button(master_frame, text='GO BACK', command=go_back)
+            go_back.pack(anchor=W, pady=1)
 
-    # back-end processing method
-    @staticmethod
-    def process_method():
-        pass
+            label = Label(master_frame, text='Circuit attributes {} circuit'.format(circuit)).pack(pady=10)
+
+            labels_frame = frame(master_frame, font='Verdana 10')
+
+            if circuit == 'RL':
+                print 'window {}'.format(circuit)
+                for entry in InputTexts.RL:
+                    Pmw.EntryField(labels_frame, entry_width=8, value='',
+                                   label_text='Enter {} ({}):  '.format(entry[1], entry[0]), labelpos=W,
+                                   labelmargin=1).pack(anchor=W, pady=1, expand=YES)
+            elif circuit == 'RC':
+                print 'pass {}'.format(circuit)
+            else:
+                print 'pass {}'.format(circuit)
+
+        create_menu_window(self)
 
 
 app = Application()
-app.master.title('Sample application')
 app.mainloop()

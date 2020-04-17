@@ -38,5 +38,5 @@ def get_circuit_resistance():
     pass
 
 
-def get_circuit_resistance():
+def get_circuit_resistance_2():
     pass

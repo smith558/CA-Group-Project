@@ -1,7 +1,6 @@
 # coding=utf-8
 from Tkinter import *
 from dummy import *
-import Pmw
 
 
 def frame(root, side=None, expand=YES, fill=BOTH, padx=None, pady=None, anchor=None, font=None):
@@ -34,6 +33,17 @@ class Application(Frame):
 
         self.pack(expand=YES, fill=BOTH)
         self.create_widgets()
+
+    @staticmethod
+    def processing_method(event, variables):
+        result = {}
+        for i in variables:
+            try:
+                result[i] = float(variables[i].get())
+            except ValueError:
+                variables[i].set('numbers only')
+                result[i] = None
+        print result
 
     def create_widgets(self):
         def create_menu_window(master):
@@ -69,11 +79,23 @@ class Application(Frame):
 
             labels_frame = frame(master_frame, font='Verdana 11')
 
+            self.variables = {}
             if circuit == 'RL':
-                for entry in InputTexts.RL:
-                    Pmw.EntryField(labels_frame, entry_width=8, value='',
-                                   label_text='Enter {} ({}):  '.format(entry[1], entry[0]), labelpos=W,
-                                   labelmargin=1).pack(anchor=W, pady=1, expand=YES)
+                def handler(event):
+                    return self.processing_method(event, self.variables)
+
+                for text in InputTexts.RL:
+                    var = self.variables[text[0]] = DoubleVar()
+                    entry_frame = frame(labels_frame, side=TOP, anchor=W)
+
+                    Label(entry_frame, text='Enter {} ({}):  '.format(text[1], text[0])).pack(anchor=W, side=LEFT, pady=1, expand=YES)
+                    entry = Entry(entry_frame, textvariable=var)
+                    # TODO better validation?
+                    # entry = Pmw.EntryField(labels_frame, entry_width=8, value='x',
+                    #                        label_text='Enter {} ({}):  '.format(text[1], text[0]), labelpos=W,
+                    #                        labelmargin=1, variable=self.variables[text[0]])
+                    entry.pack(pady=1, expand=YES)
+                    entry.bind('<FocusIn>', handler)
             elif circuit == 'RC':
                 pass
             else:

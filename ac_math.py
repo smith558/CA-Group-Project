@@ -1,4 +1,4 @@
-import math
+from math import sqrt, atan
 
 
 class RL_CIRCUIT():
@@ -10,7 +10,7 @@ class RL_CIRCUIT():
 
     @staticmethod
     def get_supply_voltage(vr, vl):
-        vs = math.sqrt(vr ** 2 + vl ** 2)
+        vs = sqrt(vr ** 2 + vl ** 2)
         return vs
 
     @staticmethod
@@ -21,33 +21,32 @@ class RL_CIRCUIT():
     @staticmethod
     def get_phase_angle(r, xl, xc):
         a = ((xl - xc) / r)
-        o = math.atan(a)
+        o = atan(a)
         return o
 
     @staticmethod
-    def get_inductive_reactance(f,l):
-        xl = 2*3.14*f*l
+    def get_inductive_reactance(f, l):
+        xl = 2 * 3.14 * f * l
         return xl
-        
 
     @staticmethod
-    def get_circuit_current(z,vs):
-        i = z/.vs
+    def get_circuit_current(z, vs):
+        i = z / vs
         return i
 
     @staticmethod
-    def get_supply_frequency(l,xl,):
-        f = xl/(2*3.14*l)
+    def get_supply_frequency(l, xl, ):
+        f = xl / (2 * 3.14 * l)
         return f
 
     @staticmethod
-    def get_circuit_resistance(vs,i):
-        r = vs*i
+    def get_circuit_resistance(vs, i):
+        r = vs * i
         return r
 
     @staticmethod
-    def get_circuit_resistance_2(xl,r):
-        z= math.sqrt(xl**2+r**2))
+    def get_circuit_resistance_2(xl, r):
+        z = sqrt(xl ** 2 + r ** 2)
         return z
 
 

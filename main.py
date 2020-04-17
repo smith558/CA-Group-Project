@@ -1,6 +1,7 @@
 # coding=utf-8
 from Tkinter import *
 from dummy import *
+from ac_math import *
 
 
 def frame(root, side=None, expand=YES, fill=BOTH, padx=None, pady=None, anchor=None, font=None):
@@ -35,7 +36,7 @@ class Application(Frame):
         self.create_widgets()
 
     @staticmethod
-    def processing_method(event, variables):
+    def processing_method(event, circuit, variables):
         result = {}
         for i in variables:
             try:
@@ -84,7 +85,7 @@ class Application(Frame):
             self.variables = {}
             if circuit == 'RL':
                 def handler(event):
-                    return self.processing_method(event, self.variables)
+                    return self.processing_method(event, circuit, self.variables)
 
                 for text in InputTexts.RL:
                     var = self.variables[text[0]] = StringVar()

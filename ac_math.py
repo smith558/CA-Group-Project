@@ -25,25 +25,30 @@ class RL_CIRCUIT():
         return o
 
     @staticmethod
-    def get_inductive_reactance():
-        # these are TODO
-        pass
+    def get_inductive_reactance(f,l):
+        xl = 2*3.14*f*l
+        return xl
+        
 
     @staticmethod
-    def get_circuit_current():
-        pass
+    def get_circuit_current(z,vs):
+        i = z/.vs
+        return i
 
     @staticmethod
-    def get_supply_frequency():
-        pass
+    def get_supply_frequency(l,xl,):
+        f = xl/(2*3.14*l)
+        return f
 
     @staticmethod
-    def get_circuit_resistance():
-        pass
+    def get_circuit_resistance(vs,i):
+        r = vs*i
+        return r
 
     @staticmethod
-    def get_circuit_resistance_2():
-        pass
+    def get_circuit_resistance_2(xl,r):
+        z= math.sqrt(xl**2+r**2))
+        return z
 
 
 # these are TODO

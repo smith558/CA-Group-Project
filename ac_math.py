@@ -26,6 +26,7 @@ class RL_CIRCUIT():
 
     @staticmethod
     def get_inductive_reactance():
+        # these are TODO
         pass
 
     @staticmethod
@@ -45,6 +46,7 @@ class RL_CIRCUIT():
         pass
 
 
+# these are TODO
 class RC_CIRCUIT():
     pass
 

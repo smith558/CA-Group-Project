@@ -19,8 +19,8 @@ class RL_CIRCUIT():
         return vl
 
     @staticmethod
-    def get_phase_angle(r, xl, xc):
-        a = ((xl - xc) / r)
+    def get_phase_angle(r, xl):
+        a = (xl  / r)
         o = atan(a)
         return o
 
@@ -35,7 +35,7 @@ class RL_CIRCUIT():
         return i
 
     @staticmethod
-    def get_supply_frequency(l, xl, ):
+    def get_supply_frequency(l, xl):
         f = xl / (2 * 3.14 * l)
         return f
 

@@ -35,7 +35,7 @@ class RL_CIRCUIT():
         return i
 
     @staticmethod
-    def get_supply_frequency(l, xl, ):
+    def get_supply_frequency(l, xl):
         f = xl / (2 * 3.14 * l)
         return f
 

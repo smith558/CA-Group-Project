@@ -13,25 +13,6 @@ def frame(root, side=None, expand=YES, fill=BOTH, padx=None, pady=None, anchor=N
     return w
 
 
-def calculate_parameter(method, params_given={}, required=()):
-    condition = True
-    params_needed = {}
-
-    for parameter in required:
-        if parameter not in params_given:
-            condition = False
-            break
-        params_needed[parameter] = params_given[parameter]
-    if condition:
-        return round(method(**params_needed), 2)
-    return ''
-
-    # if 'I' in params and 'R' in params:
-    #     i = float(variables['I'].get())
-    #     r = float(variables['R'].get())
-    #     self.variables['Vr'].set(str(RL_CIRCUIT.get_resistor_voltage(i, r)))
-
-
 InputTexts = DummyClass()
 InputTexts.RL = [['Vs', 'supply voltage'], ['f', 'supply frequency'], ['XL', 'inductive reactance'],
                  ['R', 'circuit resistance'], ['Z', 'circuit impedance'],
@@ -54,40 +35,18 @@ class Application(Frame):
         self.pack(expand=YES, fill=BOTH)
         self.create_widgets()
 
-    def calculate_method(self, event, circuit, last_updated):
-        self.processing_method()
-        print last_updated
-        print 'params given_calculating: ' + str(self.params_given)
-
-        if last_updated != 'vr' and all(k in self.params_given.keys() for k in ('i', 'r')):
-            self.variables['Vr'].set(str(calculate_parameter(RL_CIRCUIT.get_resistor_voltage, self.params_given, ('i', 'r'))))
-            self.processing_method()
-        if last_updated != 'vs' and all(k in self.params_given.keys() for k in ('vr', 'vl')):
-            self.variables['Vs'].set(str(calculate_parameter(RL_CIRCUIT.get_supply_voltage, self.params_given, ('vr', 'vl'))))
-            self.processing_method()
-        if last_updated != 'vl' and all(k in self.params_given.keys() for k in ('i', 'xl')):
-            self.variables['VL'].set(str(calculate_parameter(RL_CIRCUIT.get_inductor_voltage, self.params_given, ('i', 'xl'))))
-            self.processing_method()
-        # self.variables['θ'].set(str(calculate_parameter(RL_CIRCUIT.get_phase_angle, self.params_given, ('r', 'xl', 'xc'))))
-        # self.variables['XL'].set(str(calculate_parameter(RL_CIRCUIT.get_inductive_reactance, self.params_given, ('f', 'l'))))
-        if last_updated != 'i' and all(k in self.params_given.keys() for k in ('z', 'vs')):
-            self.variables['I'].set(str(calculate_parameter(RL_CIRCUIT.get_circuit_current, self.params_given, ('z', 'vs'))))
-            self.processing_method()
-        if last_updated != 'f' and all(k in self.params_given.keys() for k in ('l', 'xl')):
-            self.variables['f'].set(str(calculate_parameter(RL_CIRCUIT.get_supply_frequency, self.params_given, ('l', 'xl'))))
-            self.processing_method()
-
-    def processing_method(self, circuit=None):
-        self.params_given = {}
-
-        for i in self.variables:
+    @staticmethod
+    def processing_method(event, circuit, variables):
+        result = {}
+        for i in variables:
             try:
-                if self.variables[i].get() == '':
+                if variables[i].get() == '':
                     continue
-                self.params_given[i.lower()] = float(self.variables[i].get())
+                result[i] = float(variables[i].get())
             except ValueError:
-                self.variables[i].set('numbers only')
-        print 'params given_processing: ' + str(self.params_given)
+                variables[i].set('numbers only')
+                result[i] = None
+        print result
 
     def create_widgets(self):
         def create_menu_window(master):
@@ -125,26 +84,21 @@ class Application(Frame):
 
             self.variables = {}
             if circuit == 'RL':
+                def handler(event):
+                    return self.processing_method(event, circuit, self.variables)
+
                 for text in InputTexts.RL:
                     var = self.variables[text[0]] = StringVar()
                     entry_frame = frame(labels_frame, side=TOP, anchor=W)
 
-                    Label(entry_frame, text='Enter {} ({}):  '.format(text[1], text[0])).pack(anchor=W, side=LEFT,
-                                                                                              pady=1, expand=YES)
+                    Label(entry_frame, text='Enter {} ({}):  '.format(text[1], text[0])).pack(anchor=W, side=LEFT, pady=1, expand=YES)
                     entry = Entry(entry_frame, textvariable=var)
                     # TODO better validation?
                     # entry = Pmw.EntryField(labels_frame, entry_width=8, value='x',
                     #                        label_text='Enter {} ({}):  '.format(text[1], text[0]), labelpos=W,
                     #                        labelmargin=1, variable=self.variables[text[0]])
                     entry.pack(pady=1, expand=YES)
-
-                    def handler(event, last_updated=text[0].lower()):
-                        return self.calculate_method(event, circuit, last_updated)
-
                     entry.bind('<FocusIn>', handler)
-                    entry.bind('<KeyRelease-Return>', handler)
-                # temp placeholder
-                Button(master_frame, text='CHART PLACEHOLDER', height=14).pack(expand=YES, fill=BOTH, pady=14)
             elif circuit == 'RC':
                 pass
             else:

@@ -1,4 +1,5 @@
 from math import sqrt, atan, acos, asin, pi
+from decimal import *
 
 
 class RL_CIRCUIT():
@@ -49,7 +50,7 @@ class RL_CIRCUIT():
 
     @staticmethod
     def get_supply_frequency(l, xl):
-        f = xl / (2 * 3.14 * l)
+        f = xl / (2 * pi * l)
         return f
 
     @staticmethod

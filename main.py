@@ -23,7 +23,7 @@ def calculate_parameter(method, params_given={}, required=()):
             break
         params_needed[parameter] = params_given[parameter]
     if condition:
-        return round(method(**params_needed), 3)
+        return round(method(**params_needed), 4)
     return ''
 
     # if 'I' in params and 'R' in params:
@@ -69,9 +69,9 @@ class Application(Frame):
 
         def up_supply_voltage():
             self.processing_method()
-            if last_updated != 'vs' and all(k in self.params_given.keys() for k in ('vr', 'vl')):
+            if last_updated != 'vs' and all(k in self.params_given.keys() for k in ('i', 'z')):
                 self.variables['Vs'].set(
-                    str(calculate_parameter(RL_CIRCUIT.get_supply_voltage, self.params_given, ('vr', 'vl'))))
+                    str(calculate_parameter(RL_CIRCUIT.get_supply_voltage_2, self.params_given, ('i', 'z'))))
                 return True
 
         def up_inductor_voltage():
@@ -109,19 +109,25 @@ class Application(Frame):
                     str(calculate_parameter(RL_CIRCUIT.get_circuit_impedence, self.params_given, ('r', 'xl'))))
                 return True
 
+        def up_supply_frequency():
+            self.processing_method()
+            if last_updated != 'f' and all(k in self.params_given.keys() for k in ('l', 'xl')):
+                self.variables['f'].set(
+                    str(calculate_parameter(RL_CIRCUIT.get_supply_frequency, self.params_given, ('l', 'xl'))))
+                return True
+
         # TODO algorithm
-        # vr,vl -> vs
-        if up_supply_voltage():
-            pass
         # i,r -> vr
         if up_resistor_voltage():
             up_supply_voltage()
         # i,xl -> vl
         if up_inductor_voltage():
             up_supply_voltage()
+            up_supply_frequency
         # f,l -> xl
         if up_inductive_reactance():
             up_inductor_voltage()
+            up_supply_frequency()
         # vs,z -> i
         if up_circuit_current():
             up_inductor_voltage()
@@ -131,6 +137,9 @@ class Application(Frame):
             up_circuit_current()
         # r,xl -> θ
         if up_phase_agnle():
+            pass
+        # l,xl -> f
+        if up_supply_frequency():
             pass
 
     def processing_method(self, circuit=None):
@@ -188,7 +197,7 @@ class Application(Frame):
                     Label(entry_frame, text='Enter {} ({}):  '.format(text[1], text[0])).pack(anchor=W, side=LEFT,
                                                                                               pady=1, expand=YES)
                     entry = Entry(entry_frame, textvariable=var)
-                    if text[0].lower() in ['i', 'z', 'θ', 'vr', 'vl']:
+                    if text[0].lower() in ['i', 'z', 'θ', 'vr', 'vl', 'xl']:
                         entry.configure(state='disabled')
                     # TODO better validation?
                     # entry = Pmw.EntryField(labels_frame, entry_width=8, value='x',
@@ -200,6 +209,7 @@ class Application(Frame):
                         return self.calculate_method(event, circuit, last_updated)
 
                     entry.bind('<FocusIn>', handler)
+                    entry.bind('<FocusOut>', handler)
                     entry.bind('<KeyRelease-Return>', handler)
                 # temp placeholder
                 Button(master_frame, text='CHART PLACEHOLDER', height=14).pack(expand=YES, fill=BOTH, pady=14)

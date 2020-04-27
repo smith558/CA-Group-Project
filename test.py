@@ -18,8 +18,8 @@ class TestRl_circuit(unittest.TestCase):
 
     def test_pahse_angle(self):
         volt = RL_CIRCUIT()
-        result = volt.get_phase_angle(float(50),29,12)
-        self.assertEqual(result,0.3277385067805555)
+        result = volt.get_phase_angle(float(50),29)
+        self.assertEqual(result,0.5255837935516102)
 
     def test_inductive_reactance(self):
         volt = RL_CIRCUIT()

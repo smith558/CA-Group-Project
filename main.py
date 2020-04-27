@@ -33,12 +33,12 @@ def calculate_parameter(method, params_given={}, required=()):
 
 
 InputTexts = DummyClass()
-InputTexts.RL = [['Vs', 'supply voltage'], ['f', 'supply frequency'], ['XL', 'inductive reactance'],
-                 ['R', 'circuit resistance'], ['Z', 'circuit impedance'],
-                 ['I', ' magnitude of the current'], ['θ', 'phase angle of the circuit'],
-                 ['Vr', 'magnitude of the voltage across the resistance'],
-                 ['VL', 'magnitude of the voltage across the inductance'],
-                 ['L', 'conductor\'s conductance']]
+InputTexts.RL = [['Vs', 'Enter supply voltage'], ['f', 'Enter supply frequency'], ['XL', 'Inductive reactance'],
+                 ['R', 'Enter circuit resistance'], ['Z', 'Circuit impedance'],
+                 ['I', 'Magnitude of the current'], ['θ', 'Phase angle of the circuit'],
+                 ['Vr', 'Magnitude of the voltage across the resistance'],
+                 ['VL', 'Magnitude of the voltage across the inductance'],
+                 ['L', 'Enter conductor\'s conductance']]
 
 InputTexts.RC = ''
 InputTexts.RLC = ''
@@ -194,7 +194,7 @@ class Application(Frame):
                     var = self.variables[text[0]] = StringVar()
                     entry_frame = frame(labels_frame, side=TOP, anchor=W)
 
-                    Label(entry_frame, text='Enter {} ({}):  '.format(text[1], text[0])).pack(anchor=W, side=LEFT,
+                    Label(entry_frame, text='{} ({}):  '.format(text[1], text[0])).pack(anchor=W, side=LEFT,
                                                                                               pady=1, expand=YES)
                     entry = Entry(entry_frame, textvariable=var)
                     if text[0].lower() in ['i', 'z', 'θ', 'vr', 'vl', 'xl']:

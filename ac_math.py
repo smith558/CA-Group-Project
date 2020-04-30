@@ -54,8 +54,8 @@ class RL_CIRCUIT():
         return f
 
     @staticmethod
-    def get_circuit_resistance(r):
-        return r
+    def get_circuit_resistance(z, xl):
+        return abs(sqrt(z ** 2 - xl ** 2))
 
     @staticmethod
     def get_circuit_impedence(xl, r):

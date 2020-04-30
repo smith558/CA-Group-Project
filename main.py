@@ -33,7 +33,7 @@ def calculate_parameter(method, params_given={}, required=()):
 
 
 InputTexts = DummyClass()
-InputTexts.RL = [['Vs', 'Enter supply voltage [V]'], ['f', 'Enter supply frequency [Hz]'],
+InputTexts.RL = [['Vs', 'Enter supply voltage (experimental) [V]'], ['f', 'Enter supply frequency [Hz]'],
                  ['XL', 'Inductive reactance [Ω]'], ['R', 'Enter circuit resistance [Ω]'],
                  ['Z', 'Circuit impedance [Ω]'], ['I', 'Magnitude of the current [A]'],
                  ['θ', 'Phase angle of the circuit [°]'], ['VR', 'Magnitude of the voltage across the resistance [V]'],
@@ -49,15 +49,16 @@ class Application(Frame):
         # declare main Frame
         Frame.__init__(self, master)
         self.master.title('AC Theory application')
+        self.winfo_toplevel().resizable(False, False)
+
         # TODO set font style
         self.master.option_add('*Font', 'Verdana 11 bold')
-
         self.params_given = {}
 
         self.pack(expand=YES, fill=BOTH)
         self.create_widgets()
 
-    def create_plot(self):
+    def plot(self):
         print 'GRAPHING'
 
         resistance = self.params_given.get('r', 19)
@@ -90,7 +91,7 @@ class Application(Frame):
             a.axhline(y=midpoint, color='grey')
 
             a.set_ylabel(ylabel='Supply voltage [V]')
-            a.set_title(label='Label')
+            a.set_title(label='Voltage across a sinusoidal AC source')
 
             canvas = FigureCanvasTkAgg(f, master)
             canvas.draw()
@@ -103,55 +104,64 @@ class Application(Frame):
         def up_resistor_voltage():
             self.processing_method()
             if last_updated != 'vr' and all(k in self.params_given.keys() for k in ('i', 'r')):
-                self.variables['VR'].set(str(calculate_parameter(RL_CIRCUIT.get_resistor_voltage, self.params_given, ('i', 'r'))))
+                self.variables['VR'].set(
+                    str(calculate_parameter(RL_CIRCUIT.get_resistor_voltage, self.params_given, ('i', 'r'))))
                 return True
 
         def up_supply_voltage():
             self.processing_method()
             if last_updated != 'vs' and all(k in self.params_given.keys() for k in ('i', 'z')):
-                self.variables['Vs'].set(str(calculate_parameter(RL_CIRCUIT.get_supply_voltage_2, self.params_given, ('i', 'z'))))
+                self.variables['Vs'].set(
+                    str(calculate_parameter(RL_CIRCUIT.get_supply_voltage_2, self.params_given, ('i', 'z'))))
                 return True
 
         def up_inductor_voltage():
             self.processing_method()
             if last_updated != 'vl' and all(k in self.params_given.keys() for k in ('i', 'xl')):
-                self.variables['VL'].set(str(calculate_parameter(RL_CIRCUIT.get_inductor_voltage, self.params_given, ('i', 'xl'))))
+                self.variables['VL'].set(
+                    str(calculate_parameter(RL_CIRCUIT.get_inductor_voltage, self.params_given, ('i', 'xl'))))
                 return True
 
         def up_phase_agnle():
             self.processing_method()
             if last_updated != 'θ' and all(k in self.params_given.keys() for k in ('r', 'xl')):
-                self.variables['θ'].set(str(calculate_parameter(RL_CIRCUIT.get_phase_angle, self.params_given, ('r', 'xl'))))
+                self.variables['θ'].set(
+                    str(calculate_parameter(RL_CIRCUIT.get_phase_angle, self.params_given, ('r', 'xl'))))
                 return True
 
         def up_inductive_reactance():
             self.processing_method()
             if last_updated != 'xl' and all(k in self.params_given.keys() for k in ('f', 'l')):
-                self.variables['XL'].set(str(calculate_parameter(RL_CIRCUIT.get_inductive_reactance, self.params_given, ('f', 'l'))))
+                self.variables['XL'].set(
+                    str(calculate_parameter(RL_CIRCUIT.get_inductive_reactance, self.params_given, ('f', 'l'))))
                 return True
 
         def up_circuit_current():
             self.processing_method()
             if last_updated != 'i' and all(k in self.params_given.keys() for k in ('z', 'vs')):
-                self.variables['I'].set(str(calculate_parameter(RL_CIRCUIT.get_circuit_current, self.params_given, ('z', 'vs'))))
+                self.variables['I'].set(
+                    str(calculate_parameter(RL_CIRCUIT.get_circuit_current, self.params_given, ('z', 'vs'))))
                 return True
 
         def up_circuit_impedance():
             self.processing_method()
             if last_updated != 'z' and all(k in self.params_given.keys() for k in ('r', 'xl')):
-                self.variables['Z'].set(str(calculate_parameter(RL_CIRCUIT.get_circuit_impedence, self.params_given, ('r', 'xl'))))
+                self.variables['Z'].set(
+                    str(calculate_parameter(RL_CIRCUIT.get_circuit_impedence, self.params_given, ('r', 'xl'))))
                 return True
 
         def up_supply_frequency():
             self.processing_method()
             if last_updated != 'f' and all(k in self.params_given.keys() for k in ('l', 'xl')):
-                self.variables['f'].set(str(calculate_parameter(RL_CIRCUIT.get_supply_frequency, self.params_given, ('l', 'xl'))))
+                self.variables['f'].set(
+                    str(calculate_parameter(RL_CIRCUIT.get_supply_frequency, self.params_given, ('l', 'xl'))))
                 return True
 
         def up_circuit_resistance():
             self.processing_method()
             if last_updated != 'r' and all(k in self.params_given.keys() for k in ('z', 'xl')):
-                self.variables['R'].set(str(calculate_parameter(RL_CIRCUIT.get_circuit_resistance, self.params_given, ('z', 'xl'))))
+                self.variables['R'].set(
+                    str(calculate_parameter(RL_CIRCUIT.get_circuit_resistance, self.params_given, ('z', 'xl'))))
                 return True
 
         # TODO algorithm
@@ -161,7 +171,7 @@ class Application(Frame):
         # i,xl -> vl
         if up_inductor_voltage():
             up_supply_voltage()
-            up_supply_frequency
+            up_supply_frequency()
         # f,l -> xl
         if up_inductive_reactance():
             up_inductor_voltage()
@@ -225,7 +235,7 @@ class Application(Frame):
             go_back = Button(navbar_frame, text='GO BACK', command=go_back)
             go_back.pack(anchor=W, side=LEFT, pady=1)
 
-            refresh = Button(navbar_frame, text='GRAPH', command=self.create_plot)
+            refresh = Button(navbar_frame, text='GRAPH', command=self.plot)
             refresh.pack(anchor=NE, pady=1)
 
             Label(self.circuit_frame, text='Circuit attributes {} circuit'.format(circuit)).pack(pady=10)

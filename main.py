@@ -2,11 +2,11 @@
 from Tkinter import *
 
 import numpy as np
-from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
 
-from dummy import *
 from ac_math import *
+from dummy import *
 
 
 def frame(root, side=None, expand=YES, fill=BOTH, padx=None, pady=None, anchor=None, font=None):
@@ -59,20 +59,21 @@ class Application(Frame):
         self.create_widgets()
 
     def plot(self):
-        print 'GRAPHING'
+        self.processing_method()
 
-        resistance = self.params_given.get('r', 19)
-        inductance = self.params_given.get('l', 60e-3)
-        frequency = self.params_given.get('f', 47.75)
-        current = self.params_given.get('i', 5)
+        resistance = self.params_given.get('r')
+        inductance = self.params_given.get('l')
+        frequency = self.params_given.get('f')
+        current = self.params_given.get('i')
         master = self.chart_frame
 
         try:
             self.w.destroy()
             print 'RE-DRAWING CHART'
-        except:
+        except AttributeError:
             pass
         finally:
+            print 'GRAPHING'
             f = Figure(figsize=(5, 5), dpi=100)
             a = f.add_subplot(111)
             # b = f.add_subplot(2, 1, 2)
@@ -80,23 +81,27 @@ class Application(Frame):
             # Data for plotting
             midpoint = 0
 
-            t = np.arange(0, 2 * (1 / frequency), 0.0001)
-            w = 2 * pi * frequency
-            r = resistance
-            l = inductance
-            ang = w * l / r
-            V = (r ** 2 + (w * l) ** 2) ** 0.5 * current * np.sin(w * t + atan(ang))
+            try:
+                t = np.arange(0, 2 * (1 / frequency), 0.0001)
+                w = 2 * pi * frequency
+                r = resistance
+                l = inductance
+                ang = w * l / r
+                V = (r ** 2 + (w * l) ** 2) ** 0.5 * current * np.sin(w * t + atan(ang))
+            except TypeError:
+                pass
+            else:
+                a.plot(t, V)
+                a.axhline(y=midpoint, color='grey')
 
-            a.plot(t, V)
-            a.axhline(y=midpoint, color='grey')
+                a.set_ylabel(ylabel='Supply voltage [V]')
+                a.grid(True)
+                a.set_title(label='Voltage across a sinusoidal AC source')
 
-            a.set_ylabel(ylabel='Supply voltage [V]')
-            a.set_title(label='Voltage across a sinusoidal AC source')
-
-            canvas = FigureCanvasTkAgg(f, master)
-            canvas.draw()
-            self.w = canvas.get_tk_widget()
-            self.w.pack(side=BOTTOM, fill=BOTH, expand=True, pady=10)
+                canvas = FigureCanvasTkAgg(f, master)
+                canvas.draw()
+                self.w = canvas.get_tk_widget()
+                self.w.pack(side=BOTTOM, fill=BOTH, expand=True, pady=10)
 
     def calculate_method(self, event, circuit, last_updated):
         print last_updated
@@ -259,7 +264,6 @@ class Application(Frame):
                     def handler(event, last_updated=text[0].lower()):
                         return self.calculate_method(event, circuit, last_updated)
 
-                    entry.bind('<FocusIn>', handler)
                     entry.bind('<FocusOut>', handler)
                     entry.bind('<KeyRelease-Return>', handler)
                 # temp placeholder for chart

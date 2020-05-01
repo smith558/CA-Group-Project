@@ -24,12 +24,12 @@ class TestRl_circuit(unittest.TestCase):
     def test_inductive_reactance(self):
         volt = RL_CIRCUIT()
         result = volt.get_inductive_reactance(100,3)
-        self.assertEqual(result,1884)
+        self.assertEqual(result,1884.9555921538758)
 
     def test_circuit_current(self):
         volt = RL_CIRCUIT()
         result = volt.get_circuit_current(40,float(100))
-        self.assertEqual(result,0.4)
+        self.assertEqual(result,2.5)
 
     def test_supply_frequency(self):
         volt = RL_CIRCUIT()
@@ -39,11 +39,11 @@ class TestRl_circuit(unittest.TestCase):
     def test_circuit_resistance(self):
         volt = RL_CIRCUIT()
         result = volt.get_circuit_resistance(100,2)
-        self.assertEqual(result,200)
+        self.assertEqual(result,99.9799979995999)
 
-    def test_circuit_resistance_2(self):
+    def test_circuit_impedence(self):
         volt = RL_CIRCUIT()
-        result = int(volt.get_circuit_resistance_2(19,26))
+        result = int(volt.get_circuit_impedence(19,26))
         self.assertEqual(result,32)
 
 if __name__ == '__main__':

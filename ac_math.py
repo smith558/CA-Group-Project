@@ -81,7 +81,7 @@ class RC_CIRCUIT():
         return i * z
 
     @staticmethod
-    def get_capacitor_voltage(i, xc):
+    def get_capacitive_voltage(i, xc):
         vc = xc * i
         return vc
 
@@ -101,7 +101,7 @@ class RC_CIRCUIT():
         return o
 
     @staticmethod
-    def get_inductive_reactance(f, c):
+    def get_capacitive_reactance(f, c):
         xc = 1/(2 * pi * f * c)
         return xc
 

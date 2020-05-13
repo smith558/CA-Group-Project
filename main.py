@@ -36,23 +36,27 @@ InputTexts = DummyClass()
 InputTexts.RL = [['Vs', 'Enter supply voltage (experimental) [V]'], ['f', 'Enter supply frequency [Hz]'],
                  ['XL', 'Inductive reactance [Ω]'], ['R', 'Enter circuit resistance [Ω]'],
                  ['Z', 'Circuit impedance [Ω]'], ['I', 'Magnitude of the current [A]'],
-                 ['θ', 'Phase angle of the circuit [rad]'], ['VR', 'Magnitude of the voltage across the resistance [V]'],
+                 ['θ', 'Phase angle of the circuit [rad]'],
+                 ['VR', 'Magnitude of the voltage across the resistance [V]'],
                  ['VL', 'Magnitude of the voltage across the inductance [V]'],
                  ['L', 'Enter conductor\'s conductance [H]']]
 
-InputTexts.RC = [['Vs', 'Enter supply voltage (experimental) [V]'],['f', 'Enter supply frequency [Hz]'],
-                 ['XC', 'Capacitive reactance [Ω]'],['R', 'Enter circuit resistance [Ω]'],
-                 ['Z', 'Circuit impedance [Ω]'],['I', 'Magnitude of the current [A]'],
-                 ['θ', 'Phase angle of the circuit [rad]'],['VR', 'Magnitude of the voltage across the resistance [V]'],
+InputTexts.RC = [['Vs', 'Enter supply voltage (experimental) [V]'], ['f', 'Enter supply frequency [Hz]'],
+                 ['XC', 'Capacitive reactance [Ω]'], ['R', 'Enter circuit resistance [Ω]'],
+                 ['Z', 'Circuit impedance [Ω]'], ['I', 'Magnitude of the current [A]'],
+                 ['θ', 'Phase angle of the circuit [rad]'],
+                 ['VR', 'Magnitude of the voltage across the resistance [V]'],
                  ['VC', 'Magnitude of the voltage across the capacitor [V]'],
                  ['C', 'Enter conductor\'s capacitance [F]']]
-InputTexts.RLC = [['Vs', 'Enter supply voltage (experimental) [V]'],['f', 'Enter supply frequency [Hz]'],
-                 ['XC', 'Capacitive reactance [Ω]'],['R', 'Enter circuit resistance [Ω]'],
-                 ['Z', 'Circuit impedance [Ω]'],['I', 'Magnitude of the current [A]'],
-                 ['θ', 'Phase angle of the circuit [rad]'],['VR', 'Magnitude of the voltage across the resistance [V]'],
-                 ['VC', 'Magnitude of the voltage across the capacitor [V]'],['XL', 'Inductive reactance [Ω]'],
-                 ['VL', 'Magnitude of the voltage across the inductance [V]'],
-                 ['C', 'Enter conductor\'s capacitance [F]'],['L', 'Enter conductor\'s conductance [H]']]
+
+InputTexts.RLC = [['Vs', 'Enter supply voltage (experimental) [V]'], ['f', 'Enter supply frequency [Hz]'],
+                  ['XC', 'Capacitive reactance [Ω]'], ['R', 'Enter circuit resistance [Ω]'],
+                  ['Z', 'Circuit impedance [Ω]'], ['I', 'Magnitude of the current [A]'],
+                  ['θ', 'Phase angle of the circuit [rad]'],
+                  ['VR', 'Magnitude of the voltage across the resistance [V]'],
+                  ['VC', 'Magnitude of the voltage across the capacitor [V]'], ['XL', 'Inductive reactance [Ω]'],
+                  ['VL', 'Magnitude of the voltage across the inductance [V]'],
+                  ['C', 'Enter conductor\'s capacitance [F]'], ['L', 'Enter conductor\'s conductance [H]']]
 
 
 class Application(Frame):
@@ -116,194 +120,282 @@ class Application(Frame):
                 self.w = canvas.get_tk_widget()
                 self.w.pack(side=BOTTOM, fill=BOTH, expand=True, pady=10)
 
-    def calculate_method(self, event, circuit, last_updated):
+    def calculate_method(self, circuit, last_updated):
         print last_updated
 
-        def up_resistor_voltage():
-            self.processing_method()
-            if last_updated != 'vr' and all(k in self.params_given.keys() for k in ('i', 'r')):
-                self.variables['VR'].set(
-                    str(calculate_parameter(RL_CIRCUIT.get_resistor_voltage, self.params_given, ('i', 'r'))))
-                return True
+        if circuit == 'RL':
+            def up_resistor_voltage():
+                self.processing_method()
+                if last_updated != 'vr' and all(k in self.params_given.keys() for k in ('i', 'r')):
+                    self.variables['VR'].set(
+                        str(calculate_parameter(RL_CIRCUIT.get_resistor_voltage, self.params_given, ('i', 'r'))))
+                    return True
 
-        def up_supply_voltage():
-            self.processing_method()
-            if last_updated != 'vs' and all(k in self.params_given.keys() for k in ('i', 'z')):
-                self.variables['Vs'].set(
-                    str(calculate_parameter(RL_CIRCUIT.get_supply_voltage_2, self.params_given, ('i', 'z'))))
-                return True
+            def up_supply_voltage():
+                self.processing_method()
+                if last_updated != 'vs' and all(k in self.params_given.keys() for k in ('i', 'z')):
+                    self.variables['Vs'].set(
+                        str(calculate_parameter(RL_CIRCUIT.get_supply_voltage_2, self.params_given, ('i', 'z'))))
+                    return True
 
-        def up_inductor_voltage():
-            self.processing_method()
-            if last_updated != 'vl' and all(k in self.params_given.keys() for k in ('i', 'xl')):
-                self.variables['VL'].set(
-                    str(calculate_parameter(RL_CIRCUIT.get_inductor_voltage, self.params_given, ('i', 'xl'))))
-                return True
+            def up_inductor_voltage():
+                self.processing_method()
+                if last_updated != 'vl' and all(k in self.params_given.keys() for k in ('i', 'xl')):
+                    self.variables['VL'].set(
+                        str(calculate_parameter(RL_CIRCUIT.get_inductor_voltage, self.params_given, ('i', 'xl'))))
+                    return True
 
-        def up_phase_agnle():
-            self.processing_method()
-            if last_updated != 'θ' and all(k in self.params_given.keys() for k in ('r', 'xl')):
-                self.variables['θ'].set(
-                    str(calculate_parameter(RL_CIRCUIT.get_phase_angle, self.params_given, ('r', 'xl'))))
-                return True
+            def up_phase_agnle():
+                self.processing_method()
+                if last_updated != 'θ' and all(k in self.params_given.keys() for k in ('r', 'xl')):
+                    self.variables['θ'].set(
+                        str(calculate_parameter(RL_CIRCUIT.get_phase_angle, self.params_given, ('r', 'xl'))))
+                    return True
 
-        def up_inductive_reactance():
-            self.processing_method()
-            if last_updated != 'xl' and all(k in self.params_given.keys() for k in ('f', 'l')):
-                self.variables['XL'].set(
-                    str(calculate_parameter(RL_CIRCUIT.get_inductive_reactance, self.params_given, ('f', 'l'))))
-                return True
+            def up_inductive_reactance():
+                self.processing_method()
+                if last_updated != 'xl' and all(k in self.params_given.keys() for k in ('f', 'l')):
+                    self.variables['XL'].set(
+                        str(calculate_parameter(RL_CIRCUIT.get_inductive_reactance, self.params_given, ('f', 'l'))))
+                    return True
 
-        def up_circuit_current():
-            self.processing_method()
-            if last_updated != 'i' and all(k in self.params_given.keys() for k in ('z', 'vs')):
-                self.variables['I'].set(
-                    str(calculate_parameter(RL_CIRCUIT.get_circuit_current, self.params_given, ('z', 'vs'))))
-                return True
+            def up_circuit_current():
+                self.processing_method()
+                if last_updated != 'i' and all(k in self.params_given.keys() for k in ('z', 'vs')):
+                    self.variables['I'].set(
+                        str(calculate_parameter(RL_CIRCUIT.get_circuit_current, self.params_given, ('z', 'vs'))))
+                    return True
 
-        def up_circuit_impedance():
-            self.processing_method()
-            if last_updated != 'z' and all(k in self.params_given.keys() for k in ('r', 'xl')):
-                self.variables['Z'].set(
-                    str(calculate_parameter(RL_CIRCUIT.get_circuit_impedence, self.params_given, ('r', 'xl'))))
-                return True
+            def up_circuit_impedance():
+                self.processing_method()
+                if last_updated != 'z' and all(k in self.params_given.keys() for k in ('r', 'xl')):
+                    self.variables['Z'].set(
+                        str(calculate_parameter(RL_CIRCUIT.get_circuit_impedence, self.params_given, ('r', 'xl'))))
+                    return True
 
-        def up_supply_frequency():
-            self.processing_method()
-            if last_updated != 'f' and all(k in self.params_given.keys() for k in ('l', 'xl')):
-                self.variables['f'].set(
-                    str(calculate_parameter(RL_CIRCUIT.get_supply_frequency, self.params_given, ('l', 'xl'))))
-                return True
+            def up_supply_frequency():
+                self.processing_method()
+                if last_updated != 'f' and all(k in self.params_given.keys() for k in ('l', 'xl')):
+                    self.variables['f'].set(
+                        str(calculate_parameter(RL_CIRCUIT.get_supply_frequency, self.params_given, ('l', 'xl'))))
+                    return True
 
-        def up_circuit_resistance():
-            self.processing_method()
-            if last_updated != 'r' and all(k in self.params_given.keys() for k in ('z', 'xl')):
-                self.variables['R'].set(
-                    str(calculate_parameter(RL_CIRCUIT.get_circuit_resistance, self.params_given, ('z', 'xl'))))
-                return True
+            def up_circuit_resistance():
+                self.processing_method()
+                if last_updated != 'r' and all(k in self.params_given.keys() for k in ('z', 'xl')):
+                    self.variables['R'].set(
+                        str(calculate_parameter(RL_CIRCUIT.get_circuit_resistance, self.params_given, ('z', 'xl'))))
+                    return True
 
-        # TODO algorithm
-        # i,r -> vr
-        if up_resistor_voltage():
-            up_supply_voltage()
-        # i,xl -> vl
-        if up_inductor_voltage():
-            up_supply_voltage()
-            up_supply_frequency()
-        # f,l -> xl
-        if up_inductive_reactance():
-            up_inductor_voltage()
-            up_supply_frequency()
-            up_circuit_resistance()
-        # vs,z -> i
-        if up_circuit_current():
-            up_inductor_voltage()
-            up_resistor_voltage()
-        # xl,r -> z
-        if up_circuit_impedance():
-            up_circuit_current()
-            up_circuit_resistance()
-        # r,xl -> θ
-        if up_phase_agnle():
-            pass
-        # l,xl -> f
-        if up_supply_frequency():
-            pass
-            
-    def calculate_method_2(self, event, circuit, last_updated):
-        print last_updated
+            # TODO algorithm
+            # i,r -> vr
+            if up_resistor_voltage():
+                up_supply_voltage()
+            # i,xl -> vl
+            if up_inductor_voltage():
+                up_supply_voltage()
+                up_supply_frequency()
+            # f,l -> xl
+            if up_inductive_reactance():
+                up_inductor_voltage()
+                up_supply_frequency()
+                up_circuit_resistance()
+            # vs,z -> i
+            if up_circuit_current():
+                up_inductor_voltage()
+                up_resistor_voltage()
+            # xl,r -> z
+            if up_circuit_impedance():
+                up_circuit_current()
+                up_circuit_resistance()
+            # r,xl -> θ
+            if up_phase_agnle():
+                pass
+            # l,xl -> f
+            if up_supply_frequency():
+                pass
+        elif circuit == 'RC':
+            def up_capacitive_reactance():
+                self.processing_method()
+                if last_updated != 'xc' and all(k in self.params_given.keys() for k in ('f', 'c')):
+                    self.variables['XC'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_capacitive_reactance, self.params_given, ('f', 'c'))))
+                    return True
 
+            def up_capacitance_voltage():
+                self.processing_method()
+                if last_updated != 'vc' and all(k in self.params_given.keys() for k in ('i', 'xc')):
+                    self.variables['VC'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_capacitive_voltage, self.params_given, ('i', 'xc'))))
+                    return True
 
-        def up_capacitive_reactance():
-            self.processing_method()
-            if last_updated != 'xc' and all(k in self.params_given.keys() for k in ('f', 'c')):
-                self.variables['XC'].set(
-                    str(calculate_parameter(RC_CIRCUIT.get_capacitive_reactance, self.params_given, ('f', 'c'))))
-                return True
+            def up_phase_agnle():
+                self.processing_method()
+                if last_updated != 'θ' and all(k in self.params_given.keys() for k in ('r', 'xc')):
+                    self.variables['θ'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_phase_angle, self.params_given, ('r', 'xc'))))
+                    return True
 
-        def up_capacitance_voltage():
-            self.processing_method()
-            if last_updated != 'vc' and all(k in self.params_given.keys() for k in ('i', 'xc')):
-                self.variables['VC'].set(
-                    str(calculate_parameter(RC_CIRCUIT.get_capacitive_voltage, self.params_given, ('i', 'xc'))))
-                return True
-            
-        def up_phase_agnle():
-            self.processing_method()
-            if last_updated != 'θ' and all(k in self.params_given.keys() for k in ('r', 'xc')):
-                self.variables['θ'].set(
-                    str(calculate_parameter(RC_CIRCUIT.get_phase_angle, self.params_given, ('r', 'xc'))))
-                return True
+            def up_supply_frequency():
+                self.processing_method()
+                if last_updated != 'f' and all(k in self.params_given.keys() for k in ('c', 'xc')):
+                    self.variables['f'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_supply_frequency, self.params_given, ('c', 'xc'))))
+                    return True
 
-        def up_supply_frequency():
-            self.processing_method()
-            if last_updated != 'f' and all(k in self.params_given.keys() for k in ('c', 'xc')):
-                self.variables['f'].set(
-                    str(calculate_parameter(RC_CIRCUIT.get_supply_frequency, self.params_given, ('c', 'xc'))))
-                return True
+            def up_circuit_resistance():
+                self.processing_method()
+                if last_updated != 'r' and all(k in self.params_given.keys() for k in ('z', 'xc')):
+                    self.variables['R'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_circuit_resistance, self.params_given, ('z', 'xc'))))
+                    return True
 
-        def up_circuit_resistance():
-            self.processing_method()
-            if last_updated != 'r' and all(k in self.params_given.keys() for k in ('z', 'xc')):
-                self.variables['R'].set(
-                    str(calculate_parameter(RC_CIRCUIT.get_circuit_resistance, self.params_given, ('z', 'xc'))))
-                return True
+            def up_circuit_impedance():
+                self.processing_method()
+                if last_updated != 'z' and all(k in self.params_given.keys() for k in ('r', 'xc')):
+                    self.variables['Z'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_circuit_impedence, self.params_given, ('r', 'xc'))))
+                    return True
 
-        def up_circuit_impedance():
-            self.processing_method()
-            if last_updated != 'z' and all(k in self.params_given.keys() for k in ('r', 'xc')):
-                self.variables['Z'].set(
-                    str(calculate_parameter(RC_CIRCUIT.get_circuit_impedence, self.params_given, ('r', 'xc'))))
-                return True
+            def up_resistor_voltage():
+                self.processing_method()
+                if last_updated != 'vr' and all(k in self.params_given.keys() for k in ('i', 'r')):
+                    self.variables['VR'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_resistor_voltage, self.params_given, ('i', 'r'))))
+                    return True
 
-        def up_resistor_voltage():
-            self.processing_method()
-            if last_updated != 'vr' and all(k in self.params_given.keys() for k in ('i', 'r')):
-                self.variables['VR'].set(
-                    str(calculate_parameter(RC_CIRCUIT.get_resistor_voltage, self.params_given, ('i', 'r'))))
-                return True
+            def up_supply_voltage():
+                self.processing_method()
+                if last_updated != 'vs' and all(k in self.params_given.keys() for k in ('i', 'z')):
+                    self.variables['Vs'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_supply_voltage_2, self.params_given, ('i', 'z'))))
+                    return True
 
-        def up_supply_voltage():
-            self.processing_method()
-            if last_updated != 'vs' and all(k in self.params_given.keys() for k in ('i', 'z')):
-                self.variables['Vs'].set(
-                    str(calculate_parameter(RC_CIRCUIT.get_supply_voltage_2, self.params_given, ('i', 'z'))))
-                return True
+            def up_circuit_current():
+                self.processing_method()
+                if last_updated != 'i' and all(k in self.params_given.keys() for k in ('z', 'vs')):
+                    self.variables['I'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_circuit_current, self.params_given, ('z', 'vs'))))
+                    return True
 
-        def up_circuit_current():
-            self.processing_method()
-            if last_updated != 'i' and all(k in self.params_given.keys() for k in ('z', 'vs')):
-                self.variables['I'].set(
-                    str(calculate_parameter(RC_CIRCUIT.get_circuit_current, self.params_given, ('z', 'vs'))))
-                return True
+            # TODO algorithm
+            # i,r -> vr
+            if up_resistor_voltage():
+                up_supply_voltage()
+            # i,xc -> vc
+            if up_capacitance_voltage():
+                up_supply_voltage()
+                up_supply_frequency()
+            # f,c -> xc
+            if up_capacitive_reactance():
+                up_capacitance_voltage()
+                up_supply_frequency()
+                up_circuit_resistance()
+            # vs,z -> i
+            if up_circuit_current():
+                up_capacitance_voltage()
+                up_resistor_voltage()
+            # xc,r -> z
+            if up_circuit_impedance():
+                up_circuit_current()
+                up_circuit_resistance()
+            # r,xc -> θ
+            if up_phase_agnle():
+                pass
+            # c,xc -> f
+            if up_supply_frequency():
+                pass
+        else:
+            def up_capacitive_reactance():
+                self.processing_method()
+                if last_updated != 'xc' and all(k in self.params_given.keys() for k in ('f', 'c')):
+                    self.variables['XC'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_capacitive_reactance, self.params_given, ('f', 'c'))))
+                    return True
 
-        # TODO algorithm
-        # i,r -> vr
-        if up_resistor_voltage():
-            up_supply_voltage()
-        # i,xc -> vc
-        if up_capacitance_voltage():
-            up_supply_voltage()
-            up_supply_frequency()
-        # f,c -> xc
-        if up_capacitive_reactance():
-            up_capacitance_voltage()
-            up_supply_frequency()
-            up_circuit_resistance()
-        # vs,z -> i
-        if up_circuit_current():
-            up_capacitance_voltage()
-            up_resistor_voltage()
-        # xc,r -> z
-        if up_circuit_impedance():
-            up_circuit_current()
-            up_circuit_resistance()
-        # r,xc -> θ
-        if up_phase_agnle():
-            pass
-        # c,xc -> f
-        if up_supply_frequency():
-            pass
+            def up_capacitance_voltage():
+                self.processing_method()
+                if last_updated != 'vc' and all(k in self.params_given.keys() for k in ('i', 'xc')):
+                    self.variables['VC'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_capacitive_voltage, self.params_given, ('i', 'xc'))))
+                    return True
+
+            def up_phase_agnle():
+                self.processing_method()
+                if last_updated != 'θ' and all(k in self.params_given.keys() for k in ('r', 'xc')):
+                    self.variables['θ'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_phase_angle, self.params_given, ('r', 'xc'))))
+                    return True
+
+            def up_supply_frequency():
+                self.processing_method()
+                if last_updated != 'f' and all(k in self.params_given.keys() for k in ('c', 'xc')):
+                    self.variables['f'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_supply_frequency, self.params_given, ('c', 'xc'))))
+                    return True
+
+            def up_circuit_resistance():
+                self.processing_method()
+                if last_updated != 'r' and all(k in self.params_given.keys() for k in ('z', 'xc')):
+                    self.variables['R'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_circuit_resistance, self.params_given, ('z', 'xc'))))
+                    return True
+
+            def up_circuit_impedance():
+                self.processing_method()
+                if last_updated != 'z' and all(k in self.params_given.keys() for k in ('r', 'xc')):
+                    self.variables['Z'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_circuit_impedence, self.params_given, ('r', 'xc'))))
+                    return True
+
+            def up_resistor_voltage():
+                self.processing_method()
+                if last_updated != 'vr' and all(k in self.params_given.keys() for k in ('i', 'r')):
+                    self.variables['VR'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_resistor_voltage, self.params_given, ('i', 'r'))))
+                    return True
+
+            def up_supply_voltage():
+                self.processing_method()
+                if last_updated != 'vs' and all(k in self.params_given.keys() for k in ('i', 'z')):
+                    self.variables['Vs'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_supply_voltage_2, self.params_given, ('i', 'z'))))
+                    return True
+
+            def up_circuit_current():
+                self.processing_method()
+                if last_updated != 'i' and all(k in self.params_given.keys() for k in ('z', 'vs')):
+                    self.variables['I'].set(
+                        str(calculate_parameter(RC_CIRCUIT.get_circuit_current, self.params_given, ('z', 'vs'))))
+                    return True
+
+            # TODO algorithm
+            # i,r -> vr
+            if up_resistor_voltage():
+                up_supply_voltage()
+            # i,xc -> vc
+            if up_capacitance_voltage():
+                up_supply_voltage()
+                up_supply_frequency()
+            # f,c -> xc
+            if up_capacitive_reactance():
+                up_capacitance_voltage()
+                up_supply_frequency()
+                up_circuit_resistance()
+            # vs,z -> i
+            if up_circuit_current():
+                up_capacitance_voltage()
+                up_resistor_voltage()
+            # xc,r -> z
+            if up_circuit_impedance():
+                up_circuit_current()
+                up_circuit_resistance()
+            # r,xc -> θ
+            if up_phase_agnle():
+                pass
+            # c,xc -> f
+            if up_supply_frequency():
+                pass
 
     def processing_method(self, circuit=None):
         self.params_given = {}
@@ -312,9 +404,14 @@ class Application(Frame):
             try:
                 if self.variables[i].get() == '':
                     continue
+                if float(self.variables[i].get()) < 0:
+                    self.variables[i].set('positive numbers only')
+                    raise ValueError
                 self.params_given[i.lower()] = float(self.variables[i].get())
             except ValueError:
-                self.variables[i].set('numbers only')
+                if self.variables[i].get() != 'positive numbers only':
+                    self.variables[i].set('numbers only')
+
         print 'params given: ' + str(self.params_given)
 
     def create_widgets(self):
@@ -369,8 +466,8 @@ class Application(Frame):
                     # TODO better validation?
                     entry.pack(pady=1, expand=YES)
 
-                    def handler(event, last_updated=text[0].lower()):
-                        return self.calculate_method(event, circuit, last_updated)
+                    def handler(event, circuit=circuit, last_updated=text[0].lower()):
+                        return self.calculate_method(circuit, last_updated)
 
                     entry.bind('<FocusOut>', handler)
                     entry.bind('<KeyRelease-Return>', handler)
@@ -389,8 +486,8 @@ class Application(Frame):
                     # TODO better validation?
                     entry.pack(pady=1, expand=YES)
 
-                    def handler(event, last_updated=text[0].lower()):
-                        return self.calculate_method_2(event, circuit, last_updated)
+                    def handler(event, circuit=circuit, last_updated=text[0].lower()):
+                        return self.calculate_method(circuit, last_updated)
 
                     entry.bind('<FocusOut>', handler)
                     entry.bind('<KeyRelease-Return>', handler)
@@ -407,8 +504,8 @@ class Application(Frame):
                     # TODO better validation?
                     entry.pack(pady=1, expand=YES)
 
-                    def handler(event, last_updated=text[0].lower()):
-                        return self.calculate_method_2(event, circuit, last_updated)
+                    def handler(event, circuit=circuit, last_updated=text[0].lower()):
+                        return self.calculate_method(circuit, last_updated)
 
                     entry.bind('<FocusOut>', handler)
                     entry.bind('<KeyRelease-Return>', handler)

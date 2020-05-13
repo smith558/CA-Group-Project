@@ -126,4 +126,88 @@ class RC_CIRCUIT():
 
 
 class RLC_CIRCUIT():
-    pass
+    @staticmethod
+    def get_resistor_voltage(i, r):
+        vr = i * r
+        return vr
+
+    @staticmethod
+    def get_supply_voltage(vr, vc, vl):
+        vs = sqrt(vr ** 2 + (vl - vc) ** 2)
+        return vs
+
+    @staticmethod
+    def get_supply_voltage_2(i, z):
+        return i * z
+
+    @staticmethod
+    def get_capacitive_voltage(i, xc):
+        vc = xc * i
+        return vc
+
+    @staticmethod
+    def get_inductor_voltage(i, xl):
+        vl = xl * i
+        return vl
+
+    @staticmethod
+    def get_phase_angle(r, xc, xl):
+        o = atan( (xl - (1/xc)) / r)
+        return o
+
+    @staticmethod
+    def get_phase_angle_2(r, z):
+        o = acos(r / z)
+        return o
+
+    @staticmethod
+    def get_phase_angle_3(xc, z, xl):
+        o = asin( (xl - (1/xc)) / z)
+        return o
+
+    @staticmethod
+    def get_capacitive_reactance(f, c):
+        xc = 1/(2 * pi * f * c)
+        return xc
+
+    @staticmethod
+    def get_inductive_reactance(f, l):
+        xl = 2 * pi * f * l
+        return xl
+
+    @staticmethod
+    def get_circuit_current(z, vs):
+        i = vs / z
+        return i
+
+    @staticmethod
+    def get_supply_frequency(c, xc):
+        f = 1 / (2 * pi * c * xc)
+        return f
+
+    @staticmethod
+    def get_supply_frequency_2(l, xl):
+        f = xl / (2 * pi * l)
+        return f
+
+    @staticmethod
+    def get_circuit_resistance(z, xc, xl):
+        return abs(sqrt(z ** 2 - (xl - (1/xc)) ** 2))
+
+    @staticmethod
+    def get_circuit_impedence(xc, r, xl):
+        z = sqrt( (xl - (1/xc)) ** 2 + r ** 2)
+        return z
+
+
+
+
+
+
+
+
+
+
+
+
+

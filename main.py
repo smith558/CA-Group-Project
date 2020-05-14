@@ -5,6 +5,7 @@ import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
+from idlelib.ToolTip import *
 from ac_math import *
 from dummy import *
 
@@ -33,13 +34,18 @@ def calculate_parameter(method, params_given={}, required=()):
 
 
 InputTexts = DummyClass()
-InputTexts.RL = [['Vs', 'Enter supply voltage (experimental)', 'V'], ['f', 'Enter supply frequency', 'Hz'],
-                 ['XL', 'Inductive reactance', 'Ω'], ['R', 'Enter circuit resistance', 'Ω'],
-                 ['Z', 'Circuit impedance', 'Ω'], ['I', 'Magnitude of the current', 'A'],
-                 ['θ', 'Phase angle of the circuit', 'rad'],
-                 ['VR', 'Magnitude of the voltage across the resistance', 'V'],
-                 ['VL', 'Magnitude of the voltage across the inductance', 'V'],
-                 ['L', 'Enter conductor\'s conductance', 'H']]
+InputTexts.RL = [['Vs', 'Enter supply voltage (experimental)', 'V', '[V] - Volt - derived unit for electric potential'],
+                 ['f', 'Enter supply frequency', 'Hz', '[Hz] - Hertz - derived unit of frequency'],
+                 ['XL', 'Inductive reactance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
+                 ['R', 'Enter circuit resistance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
+                 ['Z', 'Circuit impedance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
+                 ['I', 'Magnitude of the current', 'A', '[A] - Ampere -  base unit of electric current'],
+                 ['θ', 'Phase angle of the circuit', 'rad', '[rad] - Radian - standard unit of angular measure'],
+                 ['VR', 'Magnitude of the voltage across the resistance', 'V',
+                  '[V] - Volt - derived unit for electric potential'],
+                 ['VL', 'Magnitude of the voltage across the inductance', 'V',
+                  '[V] - Volt - derived unit for electric potential'],
+                 ['L', 'Enter conductor\'s conductance', 'H', '[H] - Henry - derived unit of electrical inductance']]
 
 InputTexts.RC = [['Vs', 'Enter supply voltage (experimental)', 'V'], ['f', 'Enter supply frequency', 'Hz'],
                  ['XC', 'Capacitive reactance', 'Ω'], ['R', 'Enter circuit resistance', 'Ω'],
@@ -121,6 +127,7 @@ class Application(Frame):
     def info_pop_up(self, circuit, master=None):
         top = Toplevel()
         explainer_txt = Message(top)
+
         if circuit == 'RL':
             explainer_txt.config(text='RL - Lorem ipsum is placeholder text commonly used in the graphic, '
                                       'print, and publishing industries for previewing layouts and'
@@ -374,14 +381,16 @@ class Application(Frame):
                 self.processing_method()
                 if last_updated != 'r' and all(k in self.params_given.keys() for k in ('z', 'xc', 'xl')):
                     self.variables['R'].set(
-                        str(calculate_parameter(RLC_CIRCUIT.get_circuit_resistance, self.params_given, ('z', 'xc', 'xl'))))
+                        str(calculate_parameter(RLC_CIRCUIT.get_circuit_resistance, self.params_given,
+                                                ('z', 'xc', 'xl'))))
                     return True
 
             def up_circuit_impedance():
                 self.processing_method()
                 if last_updated != 'z' and all(k in self.params_given.keys() for k in ('r', 'xc', 'xl')):
                     self.variables['Z'].set(
-                        str(calculate_parameter(RLC_CIRCUIT.get_circuit_impedence, self.params_given, ('r', 'xc', 'xl'))))
+                        str(calculate_parameter(RLC_CIRCUIT.get_circuit_impedence, self.params_given,
+                                                ('r', 'xc', 'xl'))))
                     return True
 
             def up_resistor_voltage():
@@ -418,7 +427,7 @@ class Application(Frame):
                 up_capacitance_voltage()
                 up_supply_frequency()
                 up_circuit_resistance()
-             # i,xl -> vl
+            # i,xl -> vl
             if up_inductor_voltage():
                 up_supply_voltage()
                 up_supply_frequency()
@@ -525,7 +534,9 @@ class Application(Frame):
                         entry.configure(state='disabled')
                     # TODO better validation?
                     entry.pack(pady=1, side=LEFT, anchor=W)
-                    Label(field_frame, text='{}'.format(text[2]), width=3).pack(side=LEFT, anchor=E)
+                    unit = Label(field_frame, text='{}'.format(text[2]), width=3)
+                    unit.pack(side=LEFT, anchor=E)
+                    ToolTip(unit, text[3])
 
                     def handler(event, circuit=circuit, last_updated=text[0].lower()):
                         return self.calculate_method(circuit, last_updated)

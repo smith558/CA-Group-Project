@@ -9,8 +9,8 @@ from ac_math import *
 from dummy import *
 
 
-def frame(root, side=None, expand=YES, fill=BOTH, padx=None, pady=None, anchor=None, font=None):
-    w = Frame(root)
+def frame(root, side=None, expand=YES, fill=BOTH, padx=None, pady=None, anchor=None, font=None, width=None):
+    w = Frame(root, width=width)
     if font:
         w.option_add('*Font', font)
 
@@ -33,13 +33,13 @@ def calculate_parameter(method, params_given={}, required=()):
 
 
 InputTexts = DummyClass()
-InputTexts.RL = [['Vs', 'Enter supply voltage (experimental) [V]'], ['f', 'Enter supply frequency [Hz]'],
-                 ['XL', 'Inductive reactance [Ω]'], ['R', 'Enter circuit resistance [Ω]'],
-                 ['Z', 'Circuit impedance [Ω]'], ['I', 'Magnitude of the current [A]'],
-                 ['θ', 'Phase angle of the circuit [rad]'],
-                 ['VR', 'Magnitude of the voltage across the resistance [V]'],
-                 ['VL', 'Magnitude of the voltage across the inductance [V]'],
-                 ['L', 'Enter conductor\'s conductance [H]']]
+InputTexts.RL = [['Vs', 'Enter supply voltage (experimental)', 'V'], ['f', 'Enter supply frequency', 'Hz'],
+                 ['XL', 'Inductive reactance', 'Ω'], ['R', 'Enter circuit resistance', 'Ω'],
+                 ['Z', 'Circuit impedance', 'Ω'], ['I', 'Magnitude of the current', 'A'],
+                 ['θ', 'Phase angle of the circuit', 'rad'],
+                 ['VR', 'Magnitude of the voltage across the resistance', 'V'],
+                 ['VL', 'Magnitude of the voltage across the inductance', 'V'],
+                 ['L', 'Enter conductor\'s conductance', 'H']]
 
 InputTexts.RC = [['Vs', 'Enter supply voltage (experimental) [V]'], ['f', 'Enter supply frequency [Hz]'],
                  ['XC', 'Capacitive reactance [Ω]'], ['R', 'Enter circuit resistance [Ω]'],
@@ -80,7 +80,6 @@ class Application(Frame):
         inductance = self.params_given.get('l')
         frequency = self.params_given.get('f')
         current = self.params_given.get('i')
-        capacitance = self.params_given.get('c')
         master = self.chart_frame
 
         try:
@@ -104,7 +103,6 @@ class Application(Frame):
                 l = inductance
                 ang = w * l / r
                 V = (r ** 2 + (w * l) ** 2) ** 0.5 * current * np.sin(w * t + atan(ang))
-                c = capacitance
             except TypeError:
                 pass
             else:
@@ -119,6 +117,23 @@ class Application(Frame):
                 canvas.draw()
                 self.w = canvas.get_tk_widget()
                 self.w.pack(side=BOTTOM, fill=BOTH, expand=True, pady=10)
+
+    def info_pop_up(self, circuit, master=None):
+        top = Toplevel()
+        explainer_txt = Message(top)
+        if circuit == 'RL':
+            explainer_txt.config(text='RL - Lorem ipsum is placeholder text commonly used in the graphic, '
+                                      'print, and publishing industries for previewing layouts and'
+                                      'visual mockups.')
+        elif circuit == 'RC':
+            explainer_txt.config(text='RC - Lorem ipsum is placeholder text commonly used in the graphic, '
+                                      'print, and publishing industries for previewing layouts and'
+                                      'visual mockups.')
+        else:
+            explainer_txt.config(text='RLC - Lorem ipsum is placeholder text commonly used in the graphic, '
+                                      'print, and publishing industries for previewing layouts and'
+                                      'visual mockups.')
+        explainer_txt.pack(side=TOP, anchor=N, expand=YES, fill=BOTH, pady=3)
 
     def calculate_method(self, circuit, last_updated):
         print last_updated
@@ -436,12 +451,12 @@ class Application(Frame):
                 if self.variables[i].get() == '':
                     continue
                 if float(self.variables[i].get()) < 0:
-                    self.variables[i].set('positive numbers only')
+                    self.variables[i].set(u'posi №s only')
                     raise ValueError
                 self.params_given[i.lower()] = float(self.variables[i].get())
             except ValueError:
-                if self.variables[i].get() != 'positive numbers only':
-                    self.variables[i].set('numbers only')
+                if self.variables[i].get() != u'posi №s only':
+                    self.variables[i].set(u'№s only')
 
         print 'params given: ' + str(self.params_given)
 
@@ -462,6 +477,12 @@ class Application(Frame):
                 btn.bind('<Button-1>', handler)
                 btn.bind('<KeyPress-space>', handler)
 
+            explainer_txt = Message(self.master_frame,
+                                    text='Lorem ipsum is placeholder text commonly used in the graphic, '
+                                         'print, and publishing industries for previewing layouts and'
+                                         'visual mockups.')
+            explainer_txt.pack(side=TOP, anchor=N, expand=YES, fill=BOTH, pady=3)
+
         def create_calculations_window(event, master, circuit):
             pack_settings = self.master_frame.pack_info()
             self.master_frame.pack_forget()
@@ -476,8 +497,14 @@ class Application(Frame):
             go_back = Button(navbar_frame, text='GO BACK', command=go_back)
             go_back.pack(anchor=W, side=LEFT, pady=1)
 
+            def handler(circuit=circuit, master=navbar_frame):
+                return self.info_pop_up(circuit, master)
+
+            help_btn = Button(navbar_frame, bitmap='question', height=26, command=handler)
+            help_btn.pack(pady=1, side=RIGHT, padx=1)
+
             refresh = Button(navbar_frame, text='GRAPH', command=self.plot)
-            refresh.pack(anchor=NE, pady=1)
+            refresh.pack(anchor=E, pady=1, side=RIGHT)
 
             Label(self.circuit_frame, text='Circuit attributes {} circuit'.format(circuit)).pack(pady=10)
 
@@ -487,15 +514,18 @@ class Application(Frame):
             if circuit == 'RL':
                 for text in InputTexts.RL:
                     var = self.variables[text[0]] = StringVar()
-                    entry_frame = frame(labels_frame, side=TOP, anchor=W)
+                    entry_frame = frame(labels_frame, side=TOP, anchor=W, padx=5)
 
-                    Label(entry_frame, text='{} ({}):  '.format(text[1], text[0])).pack(anchor=W, side=LEFT,
-                                                                                        pady=1, expand=YES)
-                    entry = Entry(entry_frame, textvariable=var)
+                    Label(entry_frame, text='{} ({}):  '.format(text[1], text[0])).pack(anchor=W, side=LEFT, pady=1,
+                                                                                        expand=YES)
+
+                    field_frame = frame(entry_frame)
+                    entry = Entry(field_frame, textvariable=var, width=10)
                     if text[0].lower() in ['i', 'z', 'θ', 'vr', 'vl', 'xl']:
                         entry.configure(state='disabled')
                     # TODO better validation?
-                    entry.pack(pady=1, expand=YES)
+                    entry.pack(pady=1, side=LEFT, anchor=W)
+                    Label(field_frame, text='{}'.format(text[2]), width=3).pack(side=LEFT, anchor=E)
 
                     def handler(event, circuit=circuit, last_updated=text[0].lower()):
                         return self.calculate_method(circuit, last_updated)

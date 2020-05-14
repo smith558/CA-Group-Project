@@ -47,22 +47,35 @@ InputTexts.RL = [['Vs', 'Enter supply voltage (experimental)', 'V', '[V] - Volt 
                   '[V] - Volt - derived unit for electric potential'],
                  ['L', 'Enter conductor\'s conductance', 'H', '[H] - Henry - derived unit of electrical inductance']]
 
-InputTexts.RC = [['Vs', 'Enter supply voltage (experimental)', 'V'], ['f', 'Enter supply frequency', 'Hz'],
-                 ['XC', 'Capacitive reactance', 'Ω'], ['R', 'Enter circuit resistance', 'Ω'],
-                 ['Z', 'Circuit impedance', 'Ω'], ['I', 'Magnitude of the current', 'A'],
-                 ['θ', 'Phase angle of the circuit', 'rad'],
-                 ['VR', 'Magnitude of the voltage across the resistance', 'V'],
-                 ['VC', 'Magnitude of the voltage across the capacitor', 'V'],
-                 ['C', 'Enter conductor\'s capacitance', 'F']]
+InputTexts.RC = [['Vs', 'Enter supply voltage (experimental)', 'V', '[V] - Volt - derived unit for electric potential'],
+                 ['f', 'Enter supply frequency', 'Hz', '[Hz] - Hertz - derived unit of frequency'],
+                 ['XC', 'Capacitive reactance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
+                 ['R', 'Enter circuit resistance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
+                 ['Z', 'Circuit impedance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
+                 ['I', 'Magnitude of the current', 'A', '[A] - Ampere -  base unit of electric current'],
+                 ['θ', 'Phase angle of the circuit', 'rad', '[rad] - Radian - standard unit of angular measure'],
+                 ['VR', 'Magnitude of the voltage across the resistance', 'V',
+                   '[V] - Volt - derived unit for electric potential'],
+                 ['VC', 'Magnitude of the voltage across the capacitor', 'V',
+                   '[V] - Volt - derived unit for electric potential'],
+                 ['C', 'Enter conductor\'s capacitance', 'F', '[F] - Farad - derived unit of electrical capacitance']]
 
-InputTexts.RLC = [['Vs', 'Enter supply voltage (experimental)', 'V'], ['f', 'Enter supply frequency', 'Hz'],
-                  ['XC', 'Capacitive reactance', 'Ω'], ['R', 'Enter circuit resistance', 'Ω'],
-                  ['Z', 'Circuit impedance', 'Ω'], ['I', 'Magnitude of the current', 'A'],
-                  ['θ', 'Phase angle of the circuit', 'rad'],
-                  ['VR', 'Magnitude of the voltage across the resistance', 'V'],
-                  ['VC', 'Magnitude of the voltage across the capacitor', 'V'], ['XL', 'Inductive reactance', 'Ω'],
-                  ['VL', 'Magnitude of the voltage across the inductance', 'V'],
-                  ['C', 'Enter conductor\'s capacitance', 'F'], ['L', 'Enter conductor\'s conductance', 'H']]
+InputTexts.RLC = [['Vs', 'Enter supply voltage (experimental)', 'V', '[V] - Volt - derived unit for electric potential'],
+                  ['f', 'Enter supply frequency', 'Hz', '[Hz] - Hertz - derived unit of frequency'],
+                  ['XC', 'Capacitive reactance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
+                  ['R', 'Enter circuit resistance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
+                  ['Z', 'Circuit impedance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
+                  ['I', 'Magnitude of the current', 'A', '[A] - Ampere -  base unit of electric current'],
+                  ['θ', 'Phase angle of the circuit', 'rad', '[rad] - Radian - standard unit of angular measure'],
+                  ['VR', 'Magnitude of the voltage across the resistance', 'V',
+                   '[V] - Volt - derived unit for electric potential'],
+                  ['VC', 'Magnitude of the voltage across the capacitor', 'V',
+                   '[V] - Volt - derived unit for electric potential'],
+                  ['XL', 'Inductive reactance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
+                  ['VL', 'Magnitude of the voltage across the inductance', 'V',
+                   '[V] - Volt - derived unit for electric potential'],
+                  ['C', 'Enter conductor\'s capacitance', 'F', '[F] - Farad - derived unit of electrical capacitance'],
+                  ['L', 'Enter conductor\'s conductance', 'H', '[H] - Henry - derived unit of electrical inductance']]
 
 
 class Application(Frame):
@@ -559,7 +572,9 @@ class Application(Frame):
                         entry.configure(state='disabled')
                     # TODO better validation?
                     entry.pack(pady=1, side=LEFT, anchor=W)
-                    Label(field_frame, text='{}'.format(text[2]), width=3).pack(side=LEFT, anchor=E)
+                    unit = Label(field_frame, text='{}'.format(text[2]), width=3)
+                    unit.pack(side=LEFT, anchor=E)
+                    ToolTip(unit, text[3])
 
                     def handler(event, circuit=circuit, last_updated=text[0].lower()):
                         return self.calculate_method(circuit, last_updated)
@@ -580,7 +595,9 @@ class Application(Frame):
                         entry.configure(state='disabled')
                     # TODO better validation?
                     entry.pack(pady=1, side=LEFT, anchor=W)
-                    Label(field_frame, text='{}'.format(text[2]), width=3).pack(side=LEFT, anchor=E)
+                    unit = Label(field_frame, text='{}'.format(text[2]), width=3)
+                    unit.pack(side=LEFT, anchor=E)
+                    ToolTip(unit, text[3])
 
                     def handler(event, circuit=circuit, last_updated=text[0].lower()):
                         return self.calculate_method(circuit, last_updated)

@@ -41,22 +41,22 @@ InputTexts.RL = [['Vs', 'Enter supply voltage (experimental)', 'V'], ['f', 'Ente
                  ['VL', 'Magnitude of the voltage across the inductance', 'V'],
                  ['L', 'Enter conductor\'s conductance', 'H']]
 
-InputTexts.RC = [['Vs', 'Enter supply voltage (experimental) [V]'], ['f', 'Enter supply frequency [Hz]'],
-                 ['XC', 'Capacitive reactance [Ω]'], ['R', 'Enter circuit resistance [Ω]'],
-                 ['Z', 'Circuit impedance [Ω]'], ['I', 'Magnitude of the current [A]'],
-                 ['θ', 'Phase angle of the circuit [rad]'],
-                 ['VR', 'Magnitude of the voltage across the resistance [V]'],
-                 ['VC', 'Magnitude of the voltage across the capacitor [V]'],
-                 ['C', 'Enter conductor\'s capacitance [F]']]
+InputTexts.RC = [['Vs', 'Enter supply voltage (experimental)', 'V'], ['f', 'Enter supply frequency', 'Hz'],
+                 ['XC', 'Capacitive reactance', 'Ω'], ['R', 'Enter circuit resistance', 'Ω'],
+                 ['Z', 'Circuit impedance', 'Ω'], ['I', 'Magnitude of the current', 'A'],
+                 ['θ', 'Phase angle of the circuit', 'rad'],
+                 ['VR', 'Magnitude of the voltage across the resistance', 'V'],
+                 ['VC', 'Magnitude of the voltage across the capacitor', 'V'],
+                 ['C', 'Enter conductor\'s capacitance', 'F']]
 
-InputTexts.RLC = [['Vs', 'Enter supply voltage (experimental) [V]'], ['f', 'Enter supply frequency [Hz]'],
-                  ['XC', 'Capacitive reactance [Ω]'], ['R', 'Enter circuit resistance [Ω]'],
-                  ['Z', 'Circuit impedance [Ω]'], ['I', 'Magnitude of the current [A]'],
-                  ['θ', 'Phase angle of the circuit [rad]'],
-                  ['VR', 'Magnitude of the voltage across the resistance [V]'],
-                  ['VC', 'Magnitude of the voltage across the capacitor [V]'], ['XL', 'Inductive reactance [Ω]'],
-                  ['VL', 'Magnitude of the voltage across the inductance [V]'],
-                  ['C', 'Enter conductor\'s capacitance [F]'], ['L', 'Enter conductor\'s conductance [H]']]
+InputTexts.RLC = [['Vs', 'Enter supply voltage (experimental)', 'V'], ['f', 'Enter supply frequency', 'Hz'],
+                  ['XC', 'Capacitive reactance', 'Ω'], ['R', 'Enter circuit resistance', 'Ω'],
+                  ['Z', 'Circuit impedance', 'Ω'], ['I', 'Magnitude of the current', 'A'],
+                  ['θ', 'Phase angle of the circuit', 'rad'],
+                  ['VR', 'Magnitude of the voltage across the resistance', 'V'],
+                  ['VC', 'Magnitude of the voltage across the capacitor', 'V'], ['XL', 'Inductive reactance', 'Ω'],
+                  ['VL', 'Magnitude of the voltage across the inductance', 'V'],
+                  ['C', 'Enter conductor\'s capacitance', 'F'], ['L', 'Enter conductor\'s conductance', 'H']]
 
 
 class Application(Frame):
@@ -537,15 +537,18 @@ class Application(Frame):
             elif circuit == 'RC':
                 for text in InputTexts.RC:
                     var = self.variables[text[0]] = StringVar()
-                    entry_frame = frame(labels_frame, side=TOP, anchor=W)
+                    entry_frame = frame(labels_frame, side=TOP, anchor=W, padx=5)
 
-                    Label(entry_frame, text='{} ({}):  '.format(text[1], text[0])).pack(anchor=W, side=LEFT,
-                                                                                        pady=1, expand=YES)
-                    entry = Entry(entry_frame, textvariable=var)
+                    Label(entry_frame, text='{} ({}):  '.format(text[1], text[0])).pack(anchor=W, side=LEFT, pady=1,
+                                                                                        expand=YES)
+
+                    field_frame = frame(entry_frame)
+                    entry = Entry(field_frame, textvariable=var, width=10)
                     if text[0].lower() in ['i', 'z', 'θ', 'vr', 'vc', 'xc']:
                         entry.configure(state='disabled')
                     # TODO better validation?
-                    entry.pack(pady=1, expand=YES)
+                    entry.pack(pady=1, side=LEFT, anchor=W)
+                    Label(field_frame, text='{}'.format(text[2]), width=3).pack(side=LEFT, anchor=E)
 
                     def handler(event, circuit=circuit, last_updated=text[0].lower()):
                         return self.calculate_method(circuit, last_updated)
@@ -555,15 +558,18 @@ class Application(Frame):
             else:
                 for text in InputTexts.RLC:
                     var = self.variables[text[0]] = StringVar()
-                    entry_frame = frame(labels_frame, side=TOP, anchor=W)
+                    entry_frame = frame(labels_frame, side=TOP, anchor=W, padx=5)
 
-                    Label(entry_frame, text='{} ({}):  '.format(text[1], text[0])).pack(anchor=W, side=LEFT,
-                                                                                        pady=1, expand=YES)
-                    entry = Entry(entry_frame, textvariable=var)
+                    Label(entry_frame, text='{} ({}):  '.format(text[1], text[0])).pack(anchor=W, side=LEFT, pady=1,
+                                                                                        expand=YES)
+
+                    field_frame = frame(entry_frame)
+                    entry = Entry(field_frame, textvariable=var, width=10)
                     if text[0].lower() in ['i', 'z', 'θ', 'vr', 'vc', 'xc', 'vl', 'xl']:
                         entry.configure(state='disabled')
                     # TODO better validation?
-                    entry.pack(pady=1, expand=YES)
+                    entry.pack(pady=1, side=LEFT, anchor=W)
+                    Label(field_frame, text='{}'.format(text[2]), width=3).pack(side=LEFT, anchor=E)
 
                     def handler(event, circuit=circuit, last_updated=text[0].lower()):
                         return self.calculate_method(circuit, last_updated)

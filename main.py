@@ -93,13 +93,14 @@ class Application(Frame):
         self.pack(expand=YES, fill=BOTH)
         self.create_widgets()
 
-    def plot(self):
+    def plot(self, circuit=''):
         self.processing_method()
 
         resistance = self.params_given.get('r')
         inductance = self.params_given.get('l')
         frequency = self.params_given.get('f')
         current = self.params_given.get('i')
+        capacitance = self.params_given.get('c')
         master = self.chart_frame
 
         try:
@@ -108,7 +109,7 @@ class Application(Frame):
         except AttributeError:
             pass
         finally:
-            print 'GRAPHING'
+            print 'GRAPHING {}'.format(circuit)
             f = Figure(figsize=(5, 5), dpi=100)
             a = f.add_subplot(111)
             # b = f.add_subplot(2, 1, 2)
@@ -117,12 +118,22 @@ class Application(Frame):
             midpoint = 0
 
             try:
-                t = np.arange(0, 2 * (1 / frequency), 0.0001)
-                w = 2 * pi * frequency
-                r = resistance
-                l = inductance
-                ang = w * l / r
-                V = (r ** 2 + (w * l) ** 2) ** 0.5 * current * np.sin(w * t + atan(ang))
+                if circuit == 'RL':
+                    t = np.arange(0, 2 * (1 / frequency), 0.0001)
+                    w = 2 * pi * frequency
+                    r = resistance
+                    l = inductance
+                    ang = w * l / r
+                    V = (r ** 2 + (w * l) ** 2) ** 0.5 * current * np.sin(w * t + atan(ang))
+                elif circuit == 'RC':
+                    t = np.arange(0, 2 * (1 / frequency), 0.001)
+                    w = 2 * pi * frequency
+                    r = resistance
+                    c = capacitance
+                    ang = 1 / (w * c * r)
+                    V = (r ** 2. + (1 / (w * c) ** 2)) ** 0.5 * current * np.sin(w * t - atan(ang))
+                else:
+                    pass
             except TypeError:
                 pass
             else:
@@ -541,7 +552,10 @@ class Application(Frame):
             help_btn = Button(navbar_frame, bitmap='question', height=26, command=handler)
             help_btn.pack(pady=1, side=RIGHT, padx=1)
 
-            refresh = Button(navbar_frame, text='GRAPH', command=self.plot)
+            def handler(circuit=circuit):
+                return self.plot(circuit)
+
+            refresh = Button(navbar_frame, text='GRAPH', command=handler)
             refresh.pack(anchor=E, pady=1, side=RIGHT)
 
             Label(self.circuit_frame, text='Circuit attributes {} circuit'.format(circuit)).pack(pady=10)
@@ -572,7 +586,7 @@ class Application(Frame):
 
                     entry.bind('<FocusOut>', handler)
                     entry.bind('<KeyRelease-Return>', handler)
-                # temp placeholder for chart
+                # placeholder for chart
                 self.chart_frame = frame(self.circuit_frame)
             elif circuit == 'RC':
                 for text in InputTexts.RC:
@@ -597,6 +611,8 @@ class Application(Frame):
 
                     entry.bind('<FocusOut>', handler)
                     entry.bind('<KeyRelease-Return>', handler)
+                # placeholder for chart
+                self.chart_frame = frame(self.circuit_frame)
             else:
                 for text in InputTexts.RLC:
                     var = self.variables[text[0]] = StringVar()
@@ -620,6 +636,8 @@ class Application(Frame):
 
                     entry.bind('<FocusOut>', handler)
                     entry.bind('<KeyRelease-Return>', handler)
+                # placeholder for chart
+                self.chart_frame = frame(self.circuit_frame)
 
         create_menu_window(self)
 

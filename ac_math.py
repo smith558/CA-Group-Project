@@ -65,7 +65,7 @@ class RL_CIRCUIT():
 
 # these are TODO
 class RC_CIRCUIT():
-    
+
     @staticmethod
     def get_resistor_voltage(i, r):
         vr = i * r
@@ -87,7 +87,7 @@ class RC_CIRCUIT():
 
     @staticmethod
     def get_phase_angle(r, xc):
-        o = atan((1/xc) / r)
+        o = atan(xc / r)
         return o
 
     @staticmethod
@@ -97,12 +97,12 @@ class RC_CIRCUIT():
 
     @staticmethod
     def get_phase_angle_3(xc, z):
-        o = asin((1/xc)/ z)
+        o = asin((1 / xc) / z)
         return o
 
     @staticmethod
     def get_capacitive_reactance(f, c):
-        xc = 1/(2 * pi * f * c)
+        xc = 1 / (2 * pi * f * c)
         return xc
 
     @staticmethod
@@ -117,11 +117,11 @@ class RC_CIRCUIT():
 
     @staticmethod
     def get_circuit_resistance(z, xc):
-        return abs(sqrt(z ** 2 - (1/xc) ** 2))
+        return abs(sqrt(z ** 2 - xc ** 2))
 
     @staticmethod
     def get_circuit_impedence(xc, r):
-        z = sqrt((1/xc) ** 2 + r ** 2)
+        z = sqrt(r ** 2 + xc ** 2)
         return z
 
 
@@ -152,7 +152,7 @@ class RLC_CIRCUIT():
 
     @staticmethod
     def get_phase_angle(r, xc, xl):
-        o = atan( (xl - (1/xc)) / r)
+        o = atan((xl - (1 / xc)) / r)
         return o
 
     @staticmethod
@@ -162,12 +162,12 @@ class RLC_CIRCUIT():
 
     @staticmethod
     def get_phase_angle_3(xc, z, xl):
-        o = asin( (xl - (1/xc)) / z)
+        o = asin((xl - (1 / xc)) / z)
         return o
 
     @staticmethod
     def get_capacitive_reactance(f, c):
-        xc = 1/(2 * pi * f * c)
+        xc = 1 / (2 * pi * f * c)
         return xc
 
     @staticmethod
@@ -192,22 +192,9 @@ class RLC_CIRCUIT():
 
     @staticmethod
     def get_circuit_resistance(z, xc, xl):
-        return abs(sqrt(z ** 2 - (xl - (1/xc)) ** 2))
+        return abs(sqrt(z ** 2 - (xl - (1 / xc)) ** 2))
 
     @staticmethod
     def get_circuit_impedence(xc, r, xl):
-        z = sqrt( (xl - (1/xc)) ** 2 + r ** 2)
+        z = sqrt((xl - (1 / xc)) ** 2 + r ** 2)
         return z
-
-
-
-
-
-
-
-
-
-
-
-
-

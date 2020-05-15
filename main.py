@@ -126,14 +126,20 @@ class Application(Frame):
                     ang = w * l / r
                     V = (r ** 2 + (w * l) ** 2) ** 0.5 * current * np.sin(w * t + atan(ang))
                 elif circuit == 'RC':
-                    t = np.arange(0, 2 * (1 / frequency), 0.001)
+                    t = np.arange(0, 2 * (1 / frequency), 0.0001)
                     w = 2 * pi * frequency
                     r = resistance
                     c = capacitance
                     ang = 1 / (w * c * r)
-                    V = (r ** 2. + (1 / (w * c) ** 2)) ** 0.5 * current * np.sin(w * t - atan(ang))
+                    V = (r ** 2 + (1 / (w * c) ** 2)) ** 0.5 * current * np.sin(w * t - atan(ang))
                 else:
-                    pass
+                    # TODO remove temp
+                    t = np.arange(0, 2 * (1 / frequency), 0.0001)
+                    w = 2 * pi * frequency
+                    r = resistance
+                    c = capacitance
+                    ang = 1 / (w * c * r)
+                    V = (r ** 2 + (1 / (w * c) ** 2)) ** 0.5 * current * np.sin(w * t - atan(ang))
             except TypeError:
                 pass
             else:
@@ -158,14 +164,14 @@ class Application(Frame):
                 text='RL - A resistor–inductor circuit (RL circuit), or RL filter or RL network, is an electric circuit '
                      'composed of resistors and inductors driven by a voltage or current source. A first order RL circuit is composed '
                      'of one resistor and one inductor and is the simplest type of RL circuit.'
-                     'A first order RL circuit is one of the simplest analogue infinite impulse response electronic filters.'
-                     'It consists of a resistor and an inductor, either in series driven by a voltage source or in parallel driven by'
+                     ' A first order RL circuit is one of the simplest analogue infinite impulse response electronic filters.'
+                     ' It consists of a resistor and an inductor, either in series driven by a voltage source or in parallel driven by'
                      'a current source.')
         elif circuit == 'RC':
             explainer_txt.config(
                 text='RC - A resistor–capacitor circuit (RC circuit), or RC filter or RC network, is an electric circuit composed of '
                      'resistors and capacitors driven by a voltage or current source.'
-                     'A first order RC circuit is composed of one resistor and one capacitor and is the simplest type of RC circuit. '
+                     ' A first order RC circuit is composed of one resistor and one capacitor and is the simplest type of RC circuit. '
                      'RC circuits can be used to filter a signal by blocking certain frequencies and passing others.'
                      'The two most common RC filters are the high-pass filters and low-pass filters; band-pass filters and band-stop'
                      'filters usually require RLC filters, though crude ones can be made with RC filters.')
@@ -178,9 +184,9 @@ class Application(Frame):
                      'The three circuit elements, R, L and C, can be combined in a number of different topologies. '
                      'All three elements in series or all three elements in parallel are the simplest in concept and the most straightforward to analyse. '
                      'There are, however, other arrangements, some with practical importance in real circuits. One issue often encountered is the need to take into '
-                     'account inductor resistance. Inductors are typically constructed from coils of wire, the resistance of which is not usually desirable,'
+                     'account inductor resistance. Inductors are typically constructed from coils of wire, the resistance of which is not usually desirable, '
                      'but it often has a significant effect on the circuit.')
-        explainer_txt.pack(side=TOP, anchor=N, expand=YES, fill=BOTH, pady=3)
+        explainer_txt.pack(side=TOP, anchor=N, expand=YES, fill=BOTH, pady=30, padx=30)
 
     def calculate_method(self, circuit, last_updated):
         print last_updated
@@ -527,11 +533,13 @@ class Application(Frame):
                 btn.bind('<KeyPress-space>', handler)
 
             explainer_txt = Message(self.master_frame,
-                                    text='User Guide - This program contains 3 buttons that correspond with the three circuits of AC circuits '
-                                    ', by choosing any of them a new window will appear that will let the user introduce values and resolve any problem. '
-                                    'Also for a better understanding, the program also contains help buttons that will let the user get a rudimentary '
-                                    'understanding of the circuit being used. Another function that this program offers is '
-                                    'a graphical representation of the values for a better understading of the numbers involed in the calculus.')
+                                    text='User Guide - The 3 presented buttons correspond with the three circuits of AC theory, '
+                                         'by choosing any of them a new window appears that lets the user introduce values and '
+                                         'calculate the rest of the attributes. The calculations are refreshed with any new '
+                                         'inputted values or by pressing <Enter>. Application contains help buttons'
+                                         ' (upper-right corner) that let the user get a rudimentary understanding of the circuit'
+                                         ' presented. Beneath the calculations form is a graphical representation of the values '
+                                         'for a better understading of the circuit function.')
             explainer_txt.pack(side=TOP, anchor=N, expand=YES, fill=BOTH, pady=3)
 
         def create_calculations_window(event, master, circuit):

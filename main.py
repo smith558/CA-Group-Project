@@ -527,9 +527,11 @@ class Application(Frame):
                 btn.bind('<KeyPress-space>', handler)
 
             explainer_txt = Message(self.master_frame,
-                                    text='Lorem ipsum is placeholder text commonly used in the graphic, '
-                                         'print, and publishing industries for previewing layouts and'
-                                         'visual mockups.')
+                                    text='User Guide - This program contains 3 buttons that correspond with the three circuits of AC circuits '
+                                    ', by choosing any of them a new window will appear that will let the user introduce values and resolve any problem. '
+                                    'Also for a better understanding, the program also contains help buttons that will let the user get a rudimentary '
+                                    'understanding of the circuit being used. Another function that this program offers is '
+                                    'a graphical representation of the values for a better understading of the numbers involed in the calculus.')
             explainer_txt.pack(side=TOP, anchor=N, expand=YES, fill=BOTH, pady=3)
 
         def create_calculations_window(event, master, circuit):

@@ -55,27 +55,28 @@ InputTexts.RC = [['Vs', 'Enter supply voltage (experimental)', 'V', '[V] - Volt 
                  ['I', 'Magnitude of the current', 'A', '[A] - Ampere -  base unit of electric current'],
                  ['θ', 'Phase angle of the circuit', 'rad', '[rad] - Radian - standard unit of angular measure'],
                  ['VR', 'Magnitude of the voltage across the resistance', 'V',
-                   '[V] - Volt - derived unit for electric potential'],
+                  '[V] - Volt - derived unit for electric potential'],
                  ['VC', 'Magnitude of the voltage across the capacitor', 'V',
-                   '[V] - Volt - derived unit for electric potential'],
+                  '[V] - Volt - derived unit for electric potential'],
                  ['C', 'Enter conductor\'s capacitance', 'F', '[F] - Farad - derived unit of electrical capacitance']]
 
-InputTexts.RLC = [['Vs', 'Enter supply voltage (experimental)', 'V', '[V] - Volt - derived unit for electric potential'],
-                  ['f', 'Enter supply frequency', 'Hz', '[Hz] - Hertz - derived unit of frequency'],
-                  ['XC', 'Capacitive reactance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
-                  ['R', 'Enter circuit resistance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
-                  ['Z', 'Circuit impedance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
-                  ['I', 'Magnitude of the current', 'A', '[A] - Ampere -  base unit of electric current'],
-                  ['θ', 'Phase angle of the circuit', 'rad', '[rad] - Radian - standard unit of angular measure'],
-                  ['VR', 'Magnitude of the voltage across the resistance', 'V',
-                   '[V] - Volt - derived unit for electric potential'],
-                  ['VC', 'Magnitude of the voltage across the capacitor', 'V',
-                   '[V] - Volt - derived unit for electric potential'],
-                  ['XL', 'Inductive reactance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
-                  ['VL', 'Magnitude of the voltage across the inductance', 'V',
-                   '[V] - Volt - derived unit for electric potential'],
-                  ['C', 'Enter conductor\'s capacitance', 'F', '[F] - Farad - derived unit of electrical capacitance'],
-                  ['L', 'Enter conductor\'s conductance', 'H', '[H] - Henry - derived unit of electrical inductance']]
+InputTexts.RLC = [
+    ['Vs', 'Enter supply voltage (experimental)', 'V', '[V] - Volt - derived unit for electric potential'],
+    ['f', 'Enter supply frequency', 'Hz', '[Hz] - Hertz - derived unit of frequency'],
+    ['XC', 'Capacitive reactance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
+    ['R', 'Enter circuit resistance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
+    ['Z', 'Circuit impedance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
+    ['I', 'Magnitude of the current', 'A', '[A] - Ampere -  base unit of electric current'],
+    ['θ', 'Phase angle of the circuit', 'rad', '[rad] - Radian - standard unit of angular measure'],
+    ['VR', 'Magnitude of the voltage across the resistance', 'V',
+     '[V] - Volt - derived unit for electric potential'],
+    ['VC', 'Magnitude of the voltage across the capacitor', 'V',
+     '[V] - Volt - derived unit for electric potential'],
+    ['XL', 'Inductive reactance', 'Ω', '[Ω] - Ohm - derived unit of electrical resistance'],
+    ['VL', 'Magnitude of the voltage across the inductance', 'V',
+     '[V] - Volt - derived unit for electric potential'],
+    ['C', 'Enter conductor\'s capacitance', 'F', '[F] - Farad - derived unit of electrical capacitance'],
+    ['L', 'Enter conductor\'s conductance', 'H', '[H] - Henry - derived unit of electrical inductance']]
 
 
 class Application(Frame):
@@ -142,29 +143,32 @@ class Application(Frame):
         explainer_txt = Message(top)
 
         if circuit == 'RL':
-            explainer_txt.config(text='RL - A resistor–inductor circuit (RL circuit), or RL filter or RL network, is an electric circuit '
-                                 'composed of resistors and inductors driven by a voltage or current source. A first order RL circuit is composed '
-                                 'of one resistor and one inductor and is the simplest type of RL circuit.'
-                                 'A first order RL circuit is one of the simplest analogue infinite impulse response electronic filters.'
-                                 'It consists of a resistor and an inductor, either in series driven by a voltage source or in parallel driven by'
-                                 'a current source.')
+            explainer_txt.config(
+                text='RL - A resistor–inductor circuit (RL circuit), or RL filter or RL network, is an electric circuit '
+                     'composed of resistors and inductors driven by a voltage or current source. A first order RL circuit is composed '
+                     'of one resistor and one inductor and is the simplest type of RL circuit.'
+                     'A first order RL circuit is one of the simplest analogue infinite impulse response electronic filters.'
+                     'It consists of a resistor and an inductor, either in series driven by a voltage source or in parallel driven by'
+                     'a current source.')
         elif circuit == 'RC':
-            explainer_txt.config(text='RC - A resistor–capacitor circuit (RC circuit), or RC filter or RC network, is an electric circuit composed of '
-                                 'resistors and capacitors driven by a voltage or current source.'
-                                 'A first order RC circuit is composed of one resistor and one capacitor and is the simplest type of RC circuit. '
-                                 'RC circuits can be used to filter a signal by blocking certain frequencies and passing others.'
-                                 'The two most common RC filters are the high-pass filters and low-pass filters; band-pass filters and band-stop'
-                                 'filters usually require RLC filters, though crude ones can be made with RC filters.')
+            explainer_txt.config(
+                text='RC - A resistor–capacitor circuit (RC circuit), or RC filter or RC network, is an electric circuit composed of '
+                     'resistors and capacitors driven by a voltage or current source.'
+                     'A first order RC circuit is composed of one resistor and one capacitor and is the simplest type of RC circuit. '
+                     'RC circuits can be used to filter a signal by blocking certain frequencies and passing others.'
+                     'The two most common RC filters are the high-pass filters and low-pass filters; band-pass filters and band-stop'
+                     'filters usually require RLC filters, though crude ones can be made with RC filters.')
         else:
-            explainer_txt.config(text='RLC - An RLC circuit is an electrical circuit consisting of a resistor (R), an inductor (L), and a capacitor (C), '
-                                 'connected in series or in parallel. '
-                                 'The name of the circuit is derived from the letters that are used to '
-                                 'denote the constituent components of this circuit, where the sequence of the components may vary from RLC.'
-                                 'The three circuit elements, R, L and C, can be combined in a number of different topologies. '
-                                 'All three elements in series or all three elements in parallel are the simplest in concept and the most straightforward to analyse. '
-                                 'There are, however, other arrangements, some with practical importance in real circuits. One issue often encountered is the need to take into '
-                                 'account inductor resistance. Inductors are typically constructed from coils of wire, the resistance of which is not usually desirable,'
-                                 'but it often has a significant effect on the circuit.')
+            explainer_txt.config(
+                text='RLC - An RLC circuit is an electrical circuit consisting of a resistor (R), an inductor (L), and a capacitor (C), '
+                     'connected in series or in parallel. '
+                     'The name of the circuit is derived from the letters that are used to '
+                     'denote the constituent components of this circuit, where the sequence of the components may vary from RLC.'
+                     'The three circuit elements, R, L and C, can be combined in a number of different topologies. '
+                     'All three elements in series or all three elements in parallel are the simplest in concept and the most straightforward to analyse. '
+                     'There are, however, other arrangements, some with practical importance in real circuits. One issue often encountered is the need to take into '
+                     'account inductor resistance. Inductors are typically constructed from coils of wire, the resistance of which is not usually desirable,'
+                     'but it often has a significant effect on the circuit.')
         explainer_txt.pack(side=TOP, anchor=N, expand=YES, fill=BOTH, pady=3)
 
     def calculate_method(self, circuit, last_updated):

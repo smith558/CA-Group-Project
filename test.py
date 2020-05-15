@@ -67,8 +67,8 @@ class TestRC_circuit(unittest.TestCase):
 
     def test_pahse_angle(self):
         volt = RC_CIRCUIT()
-        result = round(volt.get_phase_angle(float(10), 15), 1)
-        self.assertEqual(result, 0.52558379355161)
+        result = volt.get_phase_angle(float(10), float(15))
+        self.assertEqual(result, 0.0066665679038682285)
 
     def test_capacitive_reactance(self):
         volt = RC_CIRCUIT()
@@ -153,8 +153,8 @@ class TestRLC_circuit(unittest.TestCase):
 
     def test_supply_frequency(self):
         volt = RLC_CIRCUIT()
-        result = int(volt.get_supply_frequency(float(0.1), float(40)))
-        self.assertEqual(result, 2)
+        result = float(volt.get_supply_frequency(float(0.1), float(40)))
+        self.assertEqual(result, 0.039788735772973836)
 
 if __name__ == '__main__':
     unittest.main()
